@@ -1,4 +1,5 @@
 from ClassObject import GREEN, HEIGHT, RED, WIDTH, YELLOW, GameObject
+from Seed import Seed
 import pygame
 
 class Player(GameObject):
@@ -29,10 +30,7 @@ class Player(GameObject):
         if self.punyabrpseed > 0:
             self.punyabrpseed -= 1
 
-            return seed(
-                self.x + self.width // 2,
-                self.y + self.height // 2
-            )
+            return super().Seed()
 
         return None
 
