@@ -23,22 +23,6 @@ class Seed(GameObject):
         if self.growthstage == 2:
             return 50
         return 0
-class SeedWatered(Seed):
-    def __init__(self, x, y):
-        super().__init__(x, y)
-        self.growthstage = 1
-
-    def grow(self):
-        self.growthtime += 2
-        if self.growthtime >= 100 and self.growthstage == 1:
-            self.growthstage = 2
-        elif self.growthtime >= 200 and self.growthstage == 2:
-            self.growthstage = 3
-
-    def harvest(self):
-        if self.growthstage == 3:
-            return True
-        return False
 
 class Carrot(Seed):
     def __init__(self, x, y):
@@ -79,6 +63,85 @@ class Corn(Seed):
         if self.growthtime >= 100 and self.growthstage == 1:
             self.growthstage = 2
         if self.growthtime >= 220 and self.growthstage == 2:
+            self.growthstage = 3
+    
+    def harvest(self):
+        if self.watered == False and self.growthstage == 2:
+            return False
+        elif self.watered == True and self.growthstage == 3:
+            return True
+        return False
+
+
+class Beans(Seed):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.watered = False
+
+    def water(self):
+        self.watered = True
+    
+    def grow(self):
+        if self.watered == False:
+            self.growthtime += 1
+        else: 
+            self.growthtime += 3
+        
+        if self.growthtime >= 100 and self.growthstage == 1:
+            self.growthstage = 2
+        if self.growthtime >= 230 and self.growthstage == 2:
+            self.growthstage = 3
+    
+    def harvest(self):
+        if self.watered == False and self.growthstage == 2:
+            return False
+        elif self.watered == True and self.growthstage == 3:
+            return True
+        return False
+    
+class Cabbage(Seed):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.watered = False
+
+    def water(self):
+        self.watered = True
+    
+    def grow(self):
+        if self.watered == False:
+            self.growthtime += 1
+        else: 
+            self.growthtime += 5
+        
+        if self.growthtime >= 100 and self.growthstage == 1:
+            self.growthstage = 2
+        if self.growthtime >= 160 and self.growthstage == 2:
+            self.growthstage = 3
+    
+    def harvest(self):
+        if self.watered == False and self.growthstage == 2:
+            return False
+        elif self.watered == True and self.growthstage == 3:
+            return True
+        return False
+
+class Grape(Seed):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.watered = False
+
+    def water(self):
+        self.watered = True
+    
+    def grow(self):
+        if self.watered == False:
+            self.growthtime += 1
+        else: 
+            self.growthtime += 10
+        
+        if self.growthtime >= 100 and self.growthstage == 1:
+            self.growthstage = 2
+        if self.growthtime >= 300 and self.growthstage == 2:
             self.growthstage = 3
     
     def harvest(self):
