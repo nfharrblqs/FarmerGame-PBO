@@ -62,4 +62,31 @@ class PlayerSteve(Player):
 
     def plantseed(self):
         return super().plantseed()
-        
+
+
+class PlayerLuna(Player):
+    def __init__(self, x, y):
+        super().__init__(x, y)      
+        self.speed = 5
+        self.gold = 100
+        self.punyabrpseed = 5
+
+    def move(self, keys):
+        x = 0
+        y = 0
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            x = -self.speed
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            x = self.speed
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
+            y = -self.speed
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            y = self.speed
+
+        if 0 <= self.x + x <= WIDTH - self.width:
+            self.x += x
+        if 0 <= self.y + y <= HEIGHT - self.height:
+            self.y += y
+
+    def plantseed(self):
+        return super().plantseed()
