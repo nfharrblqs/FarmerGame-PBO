@@ -1,4 +1,5 @@
 from ClassObject import GameObject, GREEN, BROWN
+import pygame
 
 class dekorasi(GameObject):
     def __init__(self, x, y, decor_type="tree"):
