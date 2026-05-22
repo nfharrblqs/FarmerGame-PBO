@@ -150,3 +150,29 @@ class Grape(Seed):
         elif self.watered == True and self.growthstage == 3:
             return True
         return False
+
+class Tomato(Seed):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.watered = False
+
+    def water(self):
+        self.watered = True
+    
+    def grow(self):
+        if self.watered == False:
+            self.growthtime += 1
+        else: 
+            self.growthtime += 3
+        
+        if self.growthtime >= 30 and self.growthstage == 1:
+            self.growthstage = 2
+        if self.growthtime >= 60 and self.growthstage == 2:
+            self.growthstage = 3
+    
+    def harvest(self):
+        if self.watered == False and self.growthstage == 2:
+            return False
+        elif self.watered == True and self.growthstage == 3:
+            return True
+        return False
