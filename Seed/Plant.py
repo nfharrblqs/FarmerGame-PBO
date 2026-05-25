@@ -1,6 +1,7 @@
 from ClassObject import GameObject
+from abc import ABC, abstractmethod
 
-class AbstractPlant(GameObject):
+class AbstractPlant(GameObject, ABC):
     def __init__(self, x, y, plant_type, maxGrowth):
         super().__init__(x, y, 30, 30, (0, 255, 0))
         self.plant_type  = plant_type
@@ -12,10 +13,12 @@ class AbstractPlant(GameObject):
     def waterPlant(self):
         self.isWatered = True
     
+    @abstractmethod
     def abstractGrow(self):
         pass
 
-    def abstractHarvet(self):
+    @abstractmethod
+    def abstractHarvest(self):
         pass
 
 class PlantCorn(AbstractPlant):

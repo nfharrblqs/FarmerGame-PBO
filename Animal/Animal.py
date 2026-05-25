@@ -1,120 +1,119 @@
 from ClassObject import HEIGHT, WHITE, WIDTH, GameObject, BROWN, RED
 import pygame
+from abc import ABC, abstractmethod
 
-class animal(GameObject):
-    def __init__(self, x, y, animal_type="chicken"):
+class Animal(GameObject, ABC):
+    def __init__(self, x, y, name: str, age: int, weight: float, hunger: int = 100 ):
         super().__init__(x, y, 40, 40, WHITE)
-        self.type = animal_type
+        self.name = name
+        self.age = age
+        self.weight = weight
+        self.hunger = hunger
+        self.__last_feeding_time = 0
         self.speed = 1
         self.direction = [1, 1]
-        self.hunger = 0
 
-    def moverandom(self):
+    def get_name(self)-> str:
+        return self.name
+
+    def get_weight(self) -> float:
+        return self.weight
+    
+    def move(self, direction: list = None):
+        if direction:
+            self.direction = direction
+        
         self.x += self.direction[0] * self.speed
         self.y += self.direction[1] * self.speed
+
         if self.x <= 0 or self.x >= WIDTH - self.width:
-            self.direction[0] *= -1
+            self.direction[0] *= -1 
         if self.y <= 0 or self.y >= HEIGHT - self.height:
             self.direction[1] *= -1
+    
+    def eating(self, eat_amount: int):
+        self._hunger += eat_amount
+        if self.hunger > 100:
+            self.hunger = 100
+    
+    def hunger_decrease(self):
+        self.hunger -= 0.1
+        if self.hunger < 0:
+            self.hunger = 0
+    
+    @abstractmethod
+    def soundorspeak(self)-> str:
+        pass 
 
+    @abstractmethod
+    def sell(self)-> int:
+        pass
+
+class Cow(Animal):
+    def __init__(self, x, y):
+        super().__init__(x, y, name="cow", age=1, weight=150.0, hunger=100)
+        self.speed = 1
+        self.milkamount = 0.0
+        self.pregnant = False
+
+    def soundorspeak(self) -> str:
+        return "Moo!"
+    
+    def sell(self) -> int:  
+        return 500  
+    
     def draw(self, surface):
-        if self.type == "chicken":
+        super().draw(surface)
+        pygame.draw.circle(
+            surface,
+            BROWN,
+            (self.x + self.width // 2, self.y + self.height // 2),
+            20
+        )
 
-            pygame.draw.rect(
-                surface,
-                (255, 255, 200),
-                (self.x, self.y, self.width, self.height))
-            pygame.draw.circle(
-                surface,
-                RED,
-                (int(self.x + self.width - 5), int(self.y + 5)),
-                3)
-        else:
-            pygame.draw.rect(
-                surface,
-                BROWN,
-                (self.x, self.y, self.width, self.height))
-
-class Cow(animal):
+class Chicken(Animal):
     def __init__(self, x, y):
-        super().__init__(x, y, "cow")
-        self.speed = 1
-        self.direction = [1, 1]
-        self.hunger = 100
-
-    def moverandom(self):
-        self.x += self.direction[0] * self.speed
-        self.y += self.direction[1] * self.speed
-        if self.x <= 0 or self.x >= WIDTH - self.width:
-            self.direction[0] *= -1
-        if self.y <= 0 or self.y >= HEIGHT - self.height:
-            self.direction[1] *= -1
-    
-    def hunger_decrease(self):
-        self.hunger -= 0.1
-        if self.hunger < 0:
-            self.hunger = 0
-    
-    def hunger_increase(self):
-        eat = 30
-        if self.hunger + eat > 100:
-            self.hunger = 100
-            print("Cow is full!")
-        else :
-            self.hunger += eat
-
-class Chicken(animal):
-    def __init__(self, x, y):
-        super().__init__(x, y, "chicken")
+        super().__init__(x, y, name="Red Chicken", age=1, weight=2.0, hunger=50)
         self.speed = 2
-        self.direction = [1, 1]
-        self.hunger = 50    
+        self.eggs_count = 0
+        self.laying_egg_status = False  
 
-    def moverandom(self):
-        self.x += self.direction[0] * self.speed
-        self.y += self.direction[1] * self.speed
-        if self.x <= 0 or self.x >= WIDTH - self.width:
-            self.direction[0] *= -1
-        if self.y <= 0 or self.y >= HEIGHT - self.height:
-            self.direction[1] *= -1
+    def soundorspeak(self) -> str:
+        return "Cluck!"
     
-    def hunger_decrease(self):
-        self.hunger -= 0.1
-        if self.hunger < 0:
-            self.hunger = 0
+    def sell(self) -> int:
+        return 100
     
-    def hunger_increase(self):
-        eat = 10
-        if self.hunger + eat > 50:
-            self.hunger = 50
-            print("Chicken is full!")
-        else :
-            self.hunger += eat
+    def draw(self, surface):
+        super().draw(surface)
+        pygame.draw.circle(
+            surface,
+            RED,
+            (self.x + self.width // 2, self.y + self.height // 2),
+            15
+        )
 
-class Bull(animal):
+class Bull(Animal):
     def __init__(self, x, y):
-        super().__init__(x, y, "bull")
+        super().__init__(x, y, name="bull", age=1, weight=500.0, hunger=100)
         self.speed = 1
-        self.direction = [1, 1]
-        self.hunger = 100
+        self.horn_length = 15.5
+        self.strength = 80
+    
+    def soundorspeak(self) -> str:
+        return "MOOOO!"
+    
+    def changeToMeat(self):
+        pass
 
-    def moverandom(self):
-        self.x += self.direction[0] * self.speed
-        self.y += self.direction[1] * self.speed
-        if self.x <= 0 or self.x >= WIDTH - self.width:
-            self.direction[0] *= -1
-        if self.y <= 0 or self.y >= HEIGHT - self.height:
-            self.direction[1] *= -1
+    def sell(self) -> int:
+        return 800
     
-    def hunger_decrease(self):
-        self.hunger -= 0.1
-        if self.hunger < 0:
-            self.hunger = 0
-    
-    def hunger_increase(self):
-        eat = 30
-        if self.hunger + eat > 100:
-            self.hunger = 100
-            print("Bull is full!")
-        else :
-            self.hunger += eat
+    def draw(self, surface):
+        super().draw(surface)
+        pygame.draw.circle(
+            surface,
+            BROWN,
+            (self.x + self.width // 2, self.y + self.height // 2),
+            25
+        )
