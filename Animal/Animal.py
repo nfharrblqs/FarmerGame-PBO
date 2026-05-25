@@ -34,3 +34,87 @@ class animal(GameObject):
                 surface,
                 BROWN,
                 (self.x, self.y, self.width, self.height))
+
+class Cow(animal):
+    def __init__(self, x, y):
+        super().__init__(x, y, "cow")
+        self.speed = 1
+        self.direction = [1, 1]
+        self.hunger = 100
+
+    def moverandom(self):
+        self.x += self.direction[0] * self.speed
+        self.y += self.direction[1] * self.speed
+        if self.x <= 0 or self.x >= WIDTH - self.width:
+            self.direction[0] *= -1
+        if self.y <= 0 or self.y >= HEIGHT - self.height:
+            self.direction[1] *= -1
+    
+    def hunger_decrease(self):
+        self.hunger -= 0.1
+        if self.hunger < 0:
+            self.hunger = 0
+    
+    def hunger_increase(self):
+        eat = 30
+        if self.hunger + eat > 100:
+            self.hunger = 100
+            print("Cow is full!")
+        else :
+            self.hunger += eat
+
+class Chicken(animal):
+    def __init__(self, x, y):
+        super().__init__(x, y, "chicken")
+        self.speed = 2
+        self.direction = [1, 1]
+        self.hunger = 50    
+
+    def moverandom(self):
+        self.x += self.direction[0] * self.speed
+        self.y += self.direction[1] * self.speed
+        if self.x <= 0 or self.x >= WIDTH - self.width:
+            self.direction[0] *= -1
+        if self.y <= 0 or self.y >= HEIGHT - self.height:
+            self.direction[1] *= -1
+    
+    def hunger_decrease(self):
+        self.hunger -= 0.1
+        if self.hunger < 0:
+            self.hunger = 0
+    
+    def hunger_increase(self):
+        eat = 10
+        if self.hunger + eat > 50:
+            self.hunger = 50
+            print("Chicken is full!")
+        else :
+            self.hunger += eat
+
+class Bull(animal):
+    def __init__(self, x, y):
+        super().__init__(x, y, "bull")
+        self.speed = 1
+        self.direction = [1, 1]
+        self.hunger = 100
+
+    def moverandom(self):
+        self.x += self.direction[0] * self.speed
+        self.y += self.direction[1] * self.speed
+        if self.x <= 0 or self.x >= WIDTH - self.width:
+            self.direction[0] *= -1
+        if self.y <= 0 or self.y >= HEIGHT - self.height:
+            self.direction[1] *= -1
+    
+    def hunger_decrease(self):
+        self.hunger -= 0.1
+        if self.hunger < 0:
+            self.hunger = 0
+    
+    def hunger_increase(self):
+        eat = 30
+        if self.hunger + eat > 100:
+            self.hunger = 100
+            print("Bull is full!")
+        else :
+            self.hunger += eat
