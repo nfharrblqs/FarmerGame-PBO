@@ -7,59 +7,62 @@ class Seed(GameObject):
         self.seedName = seed_name
         self.plantClass = plant_class
         self.isPlanted = False
-    
+        self.watered = False  
+
     def planted(self):
         self.isPlanted = True
         return self.plantClass(self.x, self.y)
 
-class Carrot(Seed):
+
+class CarrotSeed(Seed):
     def __init__(self, x, y):
-        super().__init__("carrot", Carrot, x, y)
+        super().__init__("carrot", PlantCarrot, x, y)
     
     def planted(self):
         self.isPlanted = True
         return PlantCarrot(self.x, self.y)
     
-class Corn(Seed):
+
+class CornSeed(Seed):
     def __init__(self, x, y):
-        super().__init__("corn", Corn, x, y)
-        self.watered = False
+        super().__init__("corn", PlantCorn, x, y)
 
     def planted(self):
         self.isPlanted = True
         return PlantCorn(self.x, self.y)
-class Beans(Seed):
+
+
+class BeansSeed(Seed):
     def __init__(self, x, y):
-        super().__init__("beans", Beans, x, y)
-        self.watered = False
+        super().__init__("beans", PlantBeans, x, y)
+
 
     def planted(self):
         self.isPlanted = True
         return PlantBeans(self.x, self.y)
     
-class Cabbage(Seed):
+
+class CabbageSeed(Seed):
     def __init__(self, x, y):
-        super().__init__("cabbage", Cabbage, x, y)
-        self.watered = False
+        super().__init__("cabbage", PlantCabbage, x, y)
 
     def planted(self):
         self.isPlanted = True
         return PlantCabbage(self.x, self.y)
 
-class Grape(Seed):
+
+class GrapeSeed(Seed):
     def __init__(self, x, y):
-        super().__init__("grape", Grape, x, y)
-        self.watered = False
+        super().__init__("grape", PlantGrape, x, y)
 
     def planted(self):
         self.isPlanted = True
         return PlantGrape(self.x, self.y)
 
 
-class Tomato(Seed):
+class TomatoSeed(Seed):
     def __init__(self, x, y):
-        super().__init__("tomato", Tomato, x, y)
-        self.watered = False
+        super().__init__("tomato", PlantTomato, x, y)
 
     def planted(self):
         self.isPlanted = True
