@@ -36,5 +36,3 @@ class GameObject:
             self.width,
             self.height
         )
-    
-
