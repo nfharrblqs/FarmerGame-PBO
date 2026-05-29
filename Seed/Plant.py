@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class AbstractPlant(GameObject, ABC):
     def __init__(self, x, y, plant_type, maxGrowth):
         super().__init__(x, y, 30, 30, (0, 255, 0))
-        self.plant_type  = plant_type
+        self.plant_type = plant_type
         self.growth_time = 0
         self.maxGrowth = maxGrowth
         self.growth_stage = 0
