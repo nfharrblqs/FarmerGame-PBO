@@ -16,7 +16,7 @@ class Seed(GameObject):
 
 class CarrotSeed(Seed):
     def __init__(self, x, y):
-        super().__init__("carrot", PlantCarrot, x, y)
+        super().__init__("carrot_seed", PlantCarrot, x, y)
     
     def planted(self):
         self.isPlanted = True
@@ -25,7 +25,7 @@ class CarrotSeed(Seed):
 
 class CornSeed(Seed):
     def __init__(self, x, y):
-        super().__init__("corn", PlantCorn, x, y)
+        super().__init__("corn_seed", PlantCorn, x, y)
 
     def planted(self):
         self.isPlanted = True
@@ -34,7 +34,7 @@ class CornSeed(Seed):
 
 class BeansSeed(Seed):
     def __init__(self, x, y):
-        super().__init__("beans", PlantBeans, x, y)
+        super().__init__("beans_seed", PlantBeans, x, y)
 
 
     def planted(self):
@@ -44,7 +44,7 @@ class BeansSeed(Seed):
 
 class CabbageSeed(Seed):
     def __init__(self, x, y):
-        super().__init__("cabbage", PlantCabbage, x, y)
+        super().__init__("cabbage_seed", PlantCabbage, x, y)
 
     def planted(self):
         self.isPlanted = True
@@ -53,7 +53,7 @@ class CabbageSeed(Seed):
 
 class GrapeSeed(Seed):
     def __init__(self, x, y):
-        super().__init__("grape", PlantGrape, x, y)
+        super().__init__("grape_seed", PlantGrape, x, y)
 
     def planted(self):
         self.isPlanted = True
@@ -62,7 +62,7 @@ class GrapeSeed(Seed):
 
 class TomatoSeed(Seed):
     def __init__(self, x, y):
-        super().__init__("tomato", PlantTomato, x, y)
+        super().__init__("tomato_seed", PlantTomato, x, y)
 
     def planted(self):
         self.isPlanted = True
