@@ -125,7 +125,7 @@ class animal(Animal):
         return 100
     
     def moverandom(self):  
-        """Gerak random untuk hewan"""
+        """random move animal"""
         self.x += self.direction[0] * self.speed
         self.y += self.direction[1] * self.speed
 
