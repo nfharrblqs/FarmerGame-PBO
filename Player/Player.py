@@ -4,44 +4,65 @@ import pygame
 
 class Inventory:
     def __init__(self):
-        self.items = {}  
+        self.__items = {}  
     
     def addItem(self, item, amount=1):
-        if item in self.items:
-            self.items[item] += amount
+        if item in self.__items:
+            self.__items[item] += amount
         else:
-            self.items[item] = amount
+            self.__items[item] = amount
     
     def removeItem(self, item, amount=1):
-        if item in self.items:
-            self.items[item] -= amount
-            if self.items[item] <= 0:
-                del self.items[item]
+        if item in self.__items:
+            self.__items[item] -= amount
+            if self.__items[item] <= 0:
+                del self.__items[item]
     
     def hasItem(self, item):
-        return item in self.items
+        return item in self.__items
+    
+    def getItems(self):
+        return self.__items
 
 class PlayerParent(GameObject, ABC):
     def __init__(self, x, y, name: str, energy: int = 100):
         super().__init__(x, y, 50, 50, RED)
         self.name = name
-        self.energy = energy
-        self.money = 100
-        self.gold = 100
+        self.__energy = energy
+        self.__money = 100
         self.speed = 5
         self.inventory = Inventory()
-        self.inventory.addItem("corn_seed", 3)  
+        self.inventory.addItem("corn_seed", 3) 
+
+    def getName(self) -> str:
+        return self.name
+
+    def setName(self, name: str):
+        self.name = name
+
+    def getEnergy(self) -> int:
+        return self.__self.energy
+    
+    def reduceEnergy(self, amount: int):
+        """Mengurangi energi dengan aman dan  return True jika berhasil"""
+        if self.__energy >= amount:
+            self.__energy -= amount
+            return True
+        return False
+    
+    def getMoney(self) -> int:
+        return self.__money
 
     def move(self, keys):
         dx = 0
         dy = 0
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             dx = -self.speed
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             dx = self.speed
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_UP ] or keys[pygame.K_w]:
             dy = -self.speed
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             dy = self.speed
 
         if 0 <= self.x + dx <= WIDTH - self.width:
@@ -50,51 +71,67 @@ class PlayerParent(GameObject, ABC):
             self.y += dy
 
     def waterPlant(self, plant):
-        if self.energy >= 10:
-            self.energy -= 10
-            print(f"{self.name} watered the plant.")
+        if self.reduceEnergy(10):
+            print(f"{self.name} watered the {plant.name}. Energy left: {self.__energy}")
+        else:
+            print(f"{self.name} is too tired to water the {plant.name}.")
     
     def buyItem(self, item, price):
-        if self.money >= price:
-            self.money -= price
-            self.gold = self.money
+        if self.__money >= price:
+            self.__money -= price
             self.inventory.addItem(item)
             print(f"{self.name} bought {item}.")
         else:
             print(f"{self.name} does not have enough money to buy {item}.")
+    
+    @abstractmethod
+    def plantSeed(self, seed_obj) -> str:
+        pass
 
 class PlayerSteve(PlayerParent):
     def __init__(self, x, y):
         super().__init__(x, y, "Steve", 100)
-        self.FavoriteSeed = "corn_seed"
+        self.__FavoritePlant = "corn_seed"
 
     def plantseed(self, seed_obj):
-       """Tanam seed (seed_obj adalah object Seed seperti CornSeed, dll)"""
-       seed_name = seed_obj.seedName
-       if self.inventory.hasItem(seed_name):
-        self.inventory.removeItem(seed_name)
-        self.energy -= 10
-        if self.FavoriteSeed == seed_name:
-            print(f"{self.name} planted {self.FavoriteSeed} with extra care!")
+        """Tanam seed_obj (seed_obj adalah object Seed seperti CornSeed, dll)"""
+        seed_name = seed_obj.seedName
+
+        if self.inventory.hasItem(seed_name):
+            if self.reduceEnergy(10):
+                self.inventory.removeItem(seed_name)
+
+                if self.__FavoritePlant == seed_name:
+                    print(f"{self.name} planted {self.__FavoritePlant} with extra care because it's his favorite!")
+                else:
+                    print(f"{self.name} planted {seed_name}.")
+                return seed_obj.planted()
+            else:
+                return "Not enough energy!"
         else:
-            print(f"{self.name} planted {seed_name}.")
-        return seed_obj.planted()
-       else:
-        print(f" No {seed_name} in inventory!")
-        return None
-       
+            print(f"{seed_name} not found in inventory.")
+            return None
+
 class PlayerLuna(PlayerParent):
     def __init__(self, x, y):
         super().__init__(x, y, "Luna", 100)
-        self.FavoriteSeed = "Tomato"
+        self.__FavoritePlant = "Tomato"
+        self.__BonusHarvest = 2
 
-    def plantseed(self, seed)-> str:
-        if seed in self.inventory.items:
-            self.inventory.removeItem(seed)
-            self.energy -= 10
-            if self.FavoriteSeed == seed.seed_name:
-                print(f"{self.name} planted {self.FavoriteSeed} with extra care because it's her favorite!")
+    def plantseed(self, seed_obj)-> str:
+        seed_name = seed_obj.seedName
+
+        if self.inventory.hasItem(seed_name):
+            if self.reduceEnergy(10):
+                self.inventory.removeItem(seed_name)
+            
+                if self.__FavoritePlant == seed_name:
+                    print(f"{self.name} planted {self.__FavoritePlant} with extra care because it's her favorite!")
+                else:
+                    print(f"{self.name} planted {seed_name}.")
+                return seed_obj.planted()
             else:
-                print(f"{self.name} planted {seed.seed_name}.")
-        else : 
-            return "Seed not found in inventory."
+                return "Not enough energy!"
+        else:
+            print(f"{seed_name} not found in inventory.")
+            return None

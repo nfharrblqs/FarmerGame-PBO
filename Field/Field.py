@@ -140,47 +140,46 @@ class Game:
         self.handle_inventory_click(mouse_pos)
     
     def handle_harvest(self):
+        """Panen tanaman yang sudah matang di dekat player dan masukin ke inventory"""
         for tanaman in self.plants[:]:
             if tanaman.get_rect().colliderect(self.player.get_rect()):
                 if tanaman.abstractHarvest():
-                    gold_earned = {
-                        "corn": 80,
-                        "carrot": 60,
-                        "tomato": 70,
-                        "beans": 65,
-                        "cabbage": 55,
-                        "grape": 75
-                    }.get(tanaman.plant_type, 50)
-                    
-                    self.player.gold += gold_earned
-                    self.player.money = self.player.gold
+                    crop_name = tanaman.plantType
+
+                    self.player.inventory.addItem(crop_name)
                     self.plants.remove(tanaman)
-                    print(f"Harvested {tanaman.plant_type} for {gold_earned} gold!")
+                    print(f"Congrats {crop_name} harvested! Item added to inventory.")
+                    return
                 else:
-                    print("Plant not ready to harvest yet!")
-                return
-        print("No plant nearby to harvest!")
+                    print(f"{crop_name} is not ready to harvest yet.")
+                    return
+        print("No mature plant nearby to harvest.")
 
     def sell_nearest_animal(self):
-      """Sell animal naerby player"""
-      nearest_animal = None
-      min_distance = 100  
-    
-      for animal in self.animals:
-
-        dx = animal.x - self.player.x
-        dy = animal.y - self.player.y
-        distance = (dx**2 + dy**2) ** 0.5
+        """Sell animal nearby player"""
+        nearest_animal = None
+        min_distance = 100  
         
-        if distance < min_distance:
-            min_distance = distance
-            nearest_animal = animal
-    
-      if nearest_animal:
-          self.shop.sell_animal(self.player, nearest_animal, self)
-          print(f"Animal sold!")
-      else:
-          print("No animal nearby you! (come close to animal and click J)")
+        for animal_obj in self.animals:
+
+            dx = animal_obj.x - self.player.x
+            dy = animal_obj.y - self.player.y
+            distance = (dx**2 + dy**2) ** 0.5
+            
+            if distance < min_distance:
+                min_distance = distance
+                nearest_animal = animal_obj
+        
+        if nearest_animal:
+            success = self.shop.buyFromPlayer(
+                player=self.player,
+                animal=nearest_animal,
+                game_animals_list=self.animals
+            )
+            if success:
+                print("Animal sold and removed from the field.")
+        else:
+            print("No animal nearby you! (come close to an animal and click J)")
 
     def draw_shop_menu(self, surface):
 
@@ -214,3 +213,23 @@ class Game:
           surface.blit(text, (230, y+5))
 
           y += 50
+
+    def handle_shop_click(self, mouse_pos):
+        """Mendeteksi click mouse player pada menu shop"""
+        if not self.shop_open:
+            return
+
+        items = [
+            ("corn_seed", 50),
+            ("carrot_seed", 40),
+            ("tomato_seed", 50),
+        ]
+
+        y = 150
+        for item_name, price in items:
+            item_rect = pygame.Rect(220, y, 350, 40)
+
+            if item_rect.collidepoint(mouse_pos):
+                self.shop.SellToPlayer(self.player, item=item_name)
+                break
+            y += 50
