@@ -66,7 +66,7 @@ class PlayerParent(GameObject, ABC):
 class PlayerSteve(PlayerParent):
     def __init__(self, x, y):
         super().__init__(x, y, "Steve", 100)
-        self.FavoriteSeed = "corn"
+        self.FavoriteSeed = "corn_seed"
 
     def plantseed(self, seed_obj):
        """Tanam seed (seed_obj adalah object Seed seperti CornSeed, dll)"""
