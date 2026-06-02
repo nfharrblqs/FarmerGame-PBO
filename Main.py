@@ -2,6 +2,7 @@ import pygame
 import sys
 from ClassObject import WIDTH, HEIGHT, COLOR
 from Field.Field import Game
+from UI.LoadScreen import LoadingScreen
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -15,66 +16,79 @@ pygame.mixer.music.play(-1)
 
 def main():
     clock = pygame.time.Clock()
-    game = Game()
-    running = True
+
+    loading_screen = LoadingScreen()  
+    
+    game = None
+    running = True 
+    in_game = False
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    game.open_seed_menu()  
-                elif event.key == pygame.K_h:
-                    game.handle_harvest()
-                elif event.key == pygame.K_b:
-                    game.shop.buy(game.player, "corn_seed")
-                elif event.key == pygame.K_d:
-                    game.shop.buy(game.player, "tomato_seed")
 
-                elif event.key == pygame.K_7:  
-                    game.shop.buy_animal(game.player, "chicken", game)
-                elif event.key == pygame.K_8:  
-                    game.shop.buy_animal(game.player, "cow", game)
-                elif event.key == pygame.K_9:  
-                    game.shop.buy_animal(game.player, "bull", game)
+            if not in_game:
+                result = loading_screen.handle_input(event)
+                if result == "start":
+                    print("Starting game...")
+                    game = Game()
+                    in_game = True
+                elif result == "exit":
+                    running = False
 
-                elif event.key == pygame.K_c:
-                    game.shop.sell_item(game.player, "corn_seed")
-
-                elif event.key == pygame.K_j:
-                    game.sell_nearest_animal()
+            elif in_game and game:  
                 
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE or event.key == pygame.K_i:
+                        game.open_inventory()
+                    elif event.key == pygame.K_h:
+                        game.handle_harvest()
+                    elif event.key == pygame.K_b:
+                        game.shop.buy(game.player, "corn_seed")
+                    elif event.key == pygame.K_p:
+                        game.shop.buy(game.player, "tomato_seed")
+                    elif event.key == pygame.K_7:  
+                        game.shop.buy_animal(game.player, "chicken")
+                    elif event.key == pygame.K_8:  
+                        game.shop.buy_animal(game.player, "cow")
+                    elif event.key == pygame.K_9:  
+                        game.shop.buy_animal(game.player, "bull")
+                    elif event.key == pygame.K_c:
+                        game.shop.sell_item(game.player, "corn_seed")
+                    elif event.key == pygame.K_j:
+                        game.sell_nearest_animal()
+                    elif event.key == pygame.K_s:
+                        game.inventory_menu.show()
+                        game.inventory_menu.mode = "sell"
+                    elif event.key == pygame.K_ESCAPE:
+                        if game.inventory_menu.visible:
+                            game.inventory_menu.hide()
+                        else:
+                            in_game = False
+                            game = None
+                            print("Kembali ke menu utama")
+                
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1: 
+                        mouse_pos = pygame.mouse.get_pos()
+                        
+                        if game.shop.get_rect().collidepoint(mouse_pos):
+                            print("click at shop!")
+                        
+                        if game.inventory_menu.visible:
+                            game.handle_inventory_click(mouse_pos)
+        
 
-                elif event.key == pygame.K_ESCAPE:
-                    if game.seed_menu.visible:
-                        game.seed_menu.hide()
-                    else:
-                        running = False
-                elif event.key == pygame.K_s:
-
-                    game.inventory_menu.show()
-                    game.inventory_menu.mode = "sell"
-            
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-
-                mouse_pos = pygame.mouse.get_pos()
-
-                if game.shop.get_rect().collidepoint(mouse_pos):
-                   game.toggle_shop()
-
-
-                if event.button == 1: 
-                    mouse_pos = pygame.mouse.get_pos()
-                    if game.seed_menu.visible:
-                        game.handle_planting_with_menu(mouse_pos)
-
-        keys = pygame.key.get_pressed()
-        game.player.move(keys)
-        game.update()
-        screen.fill(COLOR)
-        game.draw(screen)
+        if in_game and game:
+            keys = pygame.key.get_pressed()
+            game.player.move(keys)
+            game.update()
+            screen.fill(COLOR)
+            game.draw(screen)
+        else:
+            loading_screen.draw(screen)
+        
         pygame.display.flip()
         clock.tick(60)
 
