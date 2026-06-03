@@ -28,7 +28,7 @@ class InventoryMenu:
             
         if self.x <= mouse_pos[0] <= self.x + self.width and self.y <= mouse_pos[1] <= self.y + self.height:
             y_offset = self.y + 70
-            items = list(player.inventory.items.items())
+            items = list(player._inventory.items.items())
             
             for i, (item_name, amount) in enumerate(items):
                 item_rect = pygame.Rect(self.x + 10, y_offset - 5, self.width - 20, 40)
@@ -49,10 +49,9 @@ class InventoryMenu:
                             "bull": 400
                         }.get(item_name, 10)
                         
-                        player.gold += sell_price
-                        player.money = player.gold
+                        player._money += sell_price
                         
-                        print(f"{item_name} sold for {sell_price} gold!")
+                        print(f"{item_name} sold for {sell_price} money!")
                         self.hide()
                         return None, None
                     
@@ -89,7 +88,7 @@ class InventoryMenu:
         if not self.visible:
             return
         
-        inventory = player.inventory    
+        inventory = player._inventory    
         items = list(inventory.items.items())
         self.update_hover(mouse_pos, inventory)
         
@@ -124,7 +123,7 @@ class InventoryMenu:
             surface.blit(subtitle, (self.x + 20, self.y + 45))
         
  
-        money_text = sub_font.render(f"Gold: {player.gold}", True, (255, 215, 0))
+        money_text = sub_font.render(f"Money: {player._money}", True, (255, 215, 0))
         surface.blit(money_text, (self.x + self.width - 120, self.y + 48))
         
 

@@ -44,16 +44,22 @@ def main():
                         game.open_inventory()
                     elif event.key == pygame.K_h:
                         game.handle_harvest()
+                        game.plantingSound.play()
                     elif event.key == pygame.K_b:
                         game.shop.buy(game.player, "corn_seed")
+                        game.buyingSound.play()
                     elif event.key == pygame.K_p:
                         game.shop.buy(game.player, "tomato_seed")
+                        game.buyingSound.play()
                     elif event.key == pygame.K_7:  
                         game.shop.buy_animal(game.player, "chicken")
+                        game.buyingSound.play()
                     elif event.key == pygame.K_8:  
                         game.shop.buy_animal(game.player, "cow")
+                        game.buyingSound.play()
                     elif event.key == pygame.K_9:  
                         game.shop.buy_animal(game.player, "bull")
+                        game.buyingSound.play()
                     elif event.key == pygame.K_c:
                         game.shop.sell_item(game.player, "corn_seed")
                     elif event.key == pygame.K_j:
@@ -78,7 +84,7 @@ def main():
                         
                         if game.inventory_menu.visible:
                             game.handle_inventory_click(mouse_pos)
-        
+                            game.plantingSound.play()
 
         if in_game and game:
             keys = pygame.key.get_pressed()
