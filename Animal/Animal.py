@@ -116,12 +116,15 @@ class animal(Animal):
         if "chicken" in self.tipe:
             super().__init__(x, y, "Chicken", 1, 2.0, 100)
             self.color = RED
+            self.speed = 2
         elif "cow" in self.tipe:
             super().__init__(x, y, "Cow", 2, 150.0, 100)
             self.color = BROWN
+            self.speed = 1
         else:
             super().__init__(x, y, "Bull", 3, 200.0, 100)
             self.color = BROWN
+            self.speed = 1
 
         self.last_update_time = pygame.time.get_ticks()
         self.last_production_time = pygame.time.get_ticks()
@@ -146,13 +149,17 @@ class animal(Animal):
             return 800
         return 400
     
+    def moverandom(self):
+        """Memanggil fungsi move bawaan parent class dengan arah acak"""
+        self.move()
+
     def update_hunger(self, player_inventory, game_animals_list):
         current_time = pygame.time.get_ticks()
         if current_time - self.last_update_time > 8000:  
             self.hunger -= 10
             self.last_update_time = current_time
             print(f"{self.name} hunger decreased to {self.hunger}%")
-            if self.hunger < 0:
+            if self.hunger <= 0:
                 print(f"[{self.name}] has died of hunger!")
                 if self in game_animals_list:
                     game_animals_list.remove(self)
@@ -170,7 +177,7 @@ class animal(Animal):
         
     def produce_goods(self, player_inventory):
         if self.hunger > 40:
-            current_time = pygame.time.get.ticks()
+            current_time = pygame.time.get_ticks()
 
             if current_time - self.last_production_time > 15000:
                 self.last_production_time = current_time

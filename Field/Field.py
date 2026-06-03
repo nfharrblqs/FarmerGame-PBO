@@ -1,7 +1,7 @@
 import pygame
 import sys
 from ClassObject import GREEN, WHITE, WIDTH, HEIGHT, COLOR
-from Player.Player import PlayerSteve
+from Player.Player import PlayerSteve, PlayerLuna
 from Seed.Seed import CornSeed, CarrotSeed, TomatoSeed, BeansSeed, CabbageSeed, GrapeSeed
 from Commerce_System.Shop import Shop
 from Decoration.Decor import Decoration, Scarecrow
@@ -9,9 +9,12 @@ from Animal.Animal import animal
 from UI.InventoryMenu import InventoryMenu
 
 class Game:
-    def __init__(self):
+    def __init__(self, char_name="Steve"):
         pygame.mixer.init()
-        self.player = PlayerSteve(WIDTH // 2, HEIGHT // 2)
+        if char_name == "Steve":
+            self.player = PlayerSteve(WIDTH // 2, HEIGHT // 2)
+        elif char_name == "Luna":
+            self.player = PlayerLuna(WIDTH // 2, HEIGHT // 2)
         self.shop = Shop(WIDTH - 80, 50)
         self.plants = []
         self.animals = []

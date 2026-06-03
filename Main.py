@@ -11,22 +11,35 @@ pygame.display.set_caption("Game Pertanian (Harvest Game)")
 
 pygame.mouse.set_visible(True)  
 
-bg_music = pygame.mixer.Sound("musicBG/BGmusicfarmer.mp3")
-pygame.mixer.music.set_volume(0.5)
-pygame.mixer.music.play(-1)
+try:
+    pygame.mixer.music.load("musicBG/BGmusicfarmer.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
+except pygame.error as e:
+    print(f"Error loading background music: {e}")
+
+buying_sound  = None
+selling_sound = None    
+planting_sound = None
+harvesting_sound = None
+cow_sound = None
+chicken_sound = None
+bull_sound = None
+decor_sound = None
 
 try:
     buying_sound  = pygame.mixer.Sound("PartialSound/SoundMethode/BuySell.mp3") 
     selling_sound = pygame.mixer.Sound("PartialSound/SoundMethode/BuySell.mp3")
     planting_sound = pygame.mixer.Sound("PartialSound/SoundMethode/PlantHarvest.mp3")
     harvesting_sound = pygame.mixer.Sound("PartialSound/SoundMethode/PlantHarvest.mp3")
+    decor_sound = pygame.mixer.Sound("PartialSound/SoundMethode/PlantHarvest.mp3")
 
     cow_sound = pygame.mixer.Sound("PartialSound/SoundAnimal/SoundCow.mp3")
     cow_sound.set_volume(0.8)
-    chicken_sound = pygame.mixer.Sound("PartialSound/SoundAnimal/SoundChicken.mp3")
-    chicken_sound.set_volume(0.8)
-    bull_sound = pygame.mixer.Sound("PartialSound/SoundAnimal/SoundBull.mp3")
-    bull_sound.set_volume(0.8)
+    #chicken_sound = pygame.mixer.Sound("PartialSound/SoundAnimal/SoundChicken.mp3")
+    #chicken_sound.set_volume(0.8)
+    #bull_sound = pygame.mixer.Sound("PartialSound/SoundAnimal/SoundBull.mp3")
+    #bull_sound.set_volume(0.8)
 except pygame.error as e:
     print(f"Error loading sound: {e}")
     buying_sound = None
@@ -36,10 +49,6 @@ except pygame.error as e:
     cow_sound = None
     chicken_sound = None
     bull_sound = None
-
-pygame.mixer.music.load("musicBG/BGmusicfarmer.mp3")  
-pygame.mixer.music.set_volume(0.5)  
-pygame.mixer.music.play(-1)
 
 def main():
     clock = pygame.time.Clock()
@@ -59,7 +68,12 @@ def main():
                 result = loading_screen.handle_input(event)
                 if result == "start":
                     print("Starting game...")
-                    game = Game()
+                    choice_chara = loading_screen.characters[loading_screen.selected_char_index]
+                    game = Game(char_name=choice_chara)
+                    game.buying_sound = buying_sound
+                    game.selling_sound = selling_sound
+                    game.planting_sound = planting_sound
+                    game.harvesting_sound = harvesting_sound
                     in_game = True
                 elif result == "exit":
                     running = False
@@ -115,7 +129,10 @@ def main():
                         else:
                             if game.held_item:
                                 game.handle_world_click(mouse_pos)
-                                if planting_sound: 
+                                if "scarecrow" in str(game.held_item).lower() or "bench" in str(game.held_item).lower() or "fence" in str(game.held_item).lower():
+                                    if decor_sound:
+                                        decor_sound.play()
+                                elif planting_sound: 
                                     planting_sound.play()
                     elif event.button==3:
                         if game.held_item:

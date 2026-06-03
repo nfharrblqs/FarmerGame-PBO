@@ -37,7 +37,7 @@ class AbstractPlant(GameObject, ABC):
         pass
 
     def __del__(self): #destruktor
-        print("f{self._plant_type} plant removed from this field.")
+        print(f"{self._plant_type} plant removed from this field.")
 
 
 
