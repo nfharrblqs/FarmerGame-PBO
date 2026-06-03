@@ -32,39 +32,26 @@ class InventoryMenu:
             
             for i, (item_name, amount) in enumerate(items):
                 item_rect = pygame.Rect(self.x + 10, y_offset - 5, self.width - 20, 40)
+
                 if item_rect.collidepoint(mouse_pos):
                     
                     if self.mode == "sell":
-                        player.inventory.removeItem(item_name) 
-                        
-                        sell_price = {
-                            "corn_seed": 25,
-                            "carrot_seed": 20,
-                            "tomato_seed": 25,
-                            "beans_seed": 22,
-                            "cabbage_seed": 18,
-                            "grape_seed": 15,
-                            "chicken": 75,
-                            "cow": 250,
-                            "bull": 400
-                        }.get(item_name, 10)
-                        
-                        player._money += sell_price
-                        
-                        sukses = game.shop.buyFromPlayer(player, item=item_name)
-                        if sukses and game.sellingSound:
-                            print(f"Sold {item_name} for {sell_price} money!")
-                        return item_name, "sell"
-                    
-                    if "seed" in item_name:
-                        self.hide()
-                        return item_name, "plant"
-                    elif item_name in ["chicken", "cow", "bull"]:
-                        self.hide()
-                        return item_name, "place_animal"
-                    else:
-                        print(f"{item_name} tidak bisa ditanam (bukan benih atau hewan)")
+                        success = game.shop.buyFromPlayer(player, item=item_name)
+                        if success:
+                            if hasattr(game, 'sellingSound') and game.sellingSound:
+                                game.sellingSound.play()
+                            return item_name, "sell"
                         return None, None
+                    elif self.mode == "view":
+                        if "seed" in item_name:
+                            self.hide()
+                            return item_name, "plant"
+                        elif item_name in ["chicken", "cow", "bull"]:
+                            self.hide()
+                            return item_name, "place_animal"
+                        else:
+                            print(f"{item_name} tidak bisa ditanam (bukan benih atau hewan)")
+                            return None, None
                 y_offset += 45
         else:
             self.hide()

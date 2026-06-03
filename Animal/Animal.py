@@ -146,7 +146,7 @@ class animal(Animal):
             return 800
         return 400
     
-    def update_hunger(self, game_animals_list):
+    def update_hunger(self, player_inventory, game_animals_list):
         current_time = pygame.time.get_ticks()
         if current_time - self.last_update_time > 8000:  
             self.hunger -= 10

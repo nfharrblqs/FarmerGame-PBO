@@ -17,6 +17,7 @@ class Game:
         self.animals = []
         self.decors = []
         self.font = pygame.font.Font(None, 36)
+        self.held_item = None
 
         self.background = None
         self.load_background("Assetpng/map.png")
@@ -33,12 +34,6 @@ class Game:
         
         self.seed_menu = self.inventory_menu
         self.shop_open = False
-
-        self.plantingSound = pygame.mixer.Sound("PartialSound/SoundMethode/PlantHarvest.mp3")
-        try: 
-            self.buyingSound = pygame.mixer.Sound("PartialSound/SoundMethode/BuySell.mp3")
-        except:
-           self.buyingSound = None
 
         self.decors.append(Scarecrow(100, 100))
         self.decors.append(Scarecrow(650, 450))
@@ -63,6 +58,11 @@ class Game:
             tanaman.abstractGrow()
         for hewan in self.animals:
             hewan.moverandom()
+            hewan.update_hunger(self.player.inventory, self.animals)
+            hewan.produce_goods(self.player.inventory)
+        
+        keys = pygame.key.get_pressed()
+        self.check_energy_and_sleep(keys)
 
     def draw(self, surface):
         if self.background:
@@ -101,6 +101,16 @@ class Game:
 
         if self.shop_open:
            self.draw_shop_menu(surface)
+        
+        if self.player.x < 100 and self.player.y < 100:
+            bed_text = self.font.render("Press z to sleep.", True, WHITE)
+            surface.blit(bed_text, (120, 20))
+
+        if self.held_item:
+            mouse_pos = pygame.mouse.get_pos()
+            hold_font = pygame.font.Font(None, 20)
+            hold_text = hold_font.render(f"Held: {self.held_item} (Click to use, right click to escape)", True, (255, 0, 0))
+            surface.blit(hold_text, (mouse_pos[0] + 15, mouse_pos[1]+ 15))
 
     def open_inventory(self):
         """Buka inventory menu"""
@@ -116,10 +126,59 @@ class Game:
             result = self.inventory_menu.handle_click(mouse_pos, self.player, self)
             if result:
                 item_name, action = result
-                if action == "plant" and item_name:
-                    self.plant_from_inventory(item_name)
-                elif action == "place_animal" and item_name:
-                    self.place_animal_from_inventory(item_name)
+                if action in ["plant", "place_animal"] and item_name:
+                    if self.player.inventory.hasItem(item_name):
+                        self.held_item = item_name
+                        print(f"Held item: {self.held_item} (Click on field to use)")
+                        self.inventory_menu.hide()
+                    
+    def handle_world_click(self, mouse_pos):
+        """Mengeksekusi aksi klik di dunia (field) berdasarkan held_item"""
+
+        if not self.held_item:
+            return
+
+        if "seed" in self.held_item:
+            seed_classes = {
+                "corn_seed": CornSeed,
+                "carrot_seed": CarrotSeed,
+                "tomato_seed": TomatoSeed,
+                "beans_seed": BeansSeed,
+                "cabbage_seed": CabbageSeed,
+                "grape_seed": GrapeSeed
+            }
+
+            if not (200 <= mouse_pos[0] <= 600 and 200 <= mouse_pos[1] <= 500): #ganti sesuai bataas koordinat field tanaman
+                print("You need to be in the field area to plant seeds! (come close to field and click seed in inventory)")
+                return
+        
+        if self.held_item in seed_classes and self.player.inventory.hasItem(self.held_item):
+            if self.player.energy >= 10:
+                seed_class = seed_classes[self.held_item]
+                new_seed = seed_class(mouse_pos[0], mouse_pos[1])
+
+                self.player.inventory.removeItem(self.held_item)
+                self.player.energy -= 10
+                planted_plant = new_seed.planted()
+
+                if planted_plant:
+                    self.plants.append(planted_plant)
+                    import Main
+                    if hasattr(Main, 'planting_sound') and Main.planting_sound:
+                        Main.planting_sound.play()
+                    print(f"Planted {self.held_item} at {mouse_pos}!")
+                    self.held_item = None
+            else:
+                print("Not enough energy to plant! (Energy must be at least 10)")
+        elif self.held_item in ["chicken", "cow", "bull"]:
+            if self.player.inventory.hasItem(self.held_item):
+                self.player.inventory.removeItem(self.held_item)
+                new_animal = animal(mouse_pos[0], mouse_pos[1], self.held_item)
+                self.animals.append(new_animal)
+
+                print(f"Placed {self.held_item} at {mouse_pos}!")
+                self.held_item = None
+                
 
     def plant_from_inventory(self, seed_name):
         """Tplant from inventory"""
@@ -131,6 +190,10 @@ class Game:
             "cabbage_seed": CabbageSeed,
             "grape_seed": GrapeSeed
         }
+
+        if not (200 <= self.player.x <= 600 and 200 <= self.play.y <= 500): #angka itu ganti sama koordinat field tanaman
+            print("You need to be in the field area to plant seeds! (come close to field and click seed in inventory)")
+            return
         
         if seed_name in seed_classes and self.player._inventory.hasItem(seed_name):
             seed_class = seed_classes[seed_name]
@@ -173,6 +236,14 @@ class Game:
                 print("Watered the plant!")
                 return
         print("No plant nearby to water!")
+
+    def feed_nearest_animal(self):
+        """Mencari hewan terdekat dan memberinya makan"""
+        for hewan in self.animals:
+            if hewan.get_rect().colliderect(self.player.get_rect()):
+                hewan.give_food(self.player.inventory)
+                return
+        print("No animal nearby to feed!")
 
     def sell_nearest_animal(self):
       """Sell animal naerby player"""
@@ -247,7 +318,24 @@ class Game:
             item_rect = pygame.Rect(220, y, 350, 40)
             if item_rect.collidepoint(mouse_pos):
                 success = self.shop.sellToPlayer(player=self.player, item_name=item_name)
-                if success and self.buyingSound:
-                    self.buyingSound.play()
+                if success:
+                    import Main
+                    if hasattr(Main, 'buying_sound') and Main.buying_sound:
+                        Main.buying_sound.play()
                 break
             y += 50
+
+    def check_energy_and_sleep(self, keys):
+        if self.player.energy <= 0:
+            self.player.speed=1
+        else:
+            self.player.speed=5
+
+        if self.player.x < 100 and self.player.y < 100: #angka ganti sama koordint bed
+            if keys[pygame.K_z]:
+                self.player.energy = 100
+                print("Sleeping... Energy restored to 100!")
+
+                for tanaman in self.plants:
+                    tanaman.isWatered = False
+
