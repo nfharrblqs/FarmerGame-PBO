@@ -31,6 +31,11 @@ class PlayerParent(GameObject, ABC):
         self._inventory = Inventory()
         self._inventory.addItem("corn_seed", 3)  
 
+    def getName(self) -> str:
+        return self.name
+    
+    def setName(self, name: str):
+        self.name = name
 
     @property
     def money(self):
@@ -54,13 +59,13 @@ class PlayerParent(GameObject, ABC):
     def move(self, keys):
         dx = 0
         dy = 0
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             dx = -self.speed
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             dx = self.speed
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
             dy = -self.speed
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             dy = self.speed
 
         if 0 <= self.x + dx <= WIDTH - self.width:

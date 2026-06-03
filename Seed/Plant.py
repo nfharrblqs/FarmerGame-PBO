@@ -76,7 +76,11 @@ class PlantCorn(AbstractPlant):
             self._growth_stage = 4
     
     def abstractHarvest(self) -> bool:
-        return self._growth_stage == 4
+        if self._growth_stage == 4:
+            return "corn"
+        return None
+    
+
 
 class PlantCarrot(AbstractPlant):
     def __init__(self, x, y):
@@ -111,7 +115,9 @@ class PlantCarrot(AbstractPlant):
             self._growth_stage = 4
     
     def abstractHarvest(self) -> bool:
-        return self._growth_stage == 4
+        if self._growth_stage == 4:
+            return "carrot"
+        return None
 
 class PlantTomato(AbstractPlant):
     def __init__(self, x, y):
@@ -147,7 +153,9 @@ class PlantTomato(AbstractPlant):
             self._growth_stage = 4
     
     def abstractHarvest(self) -> bool:
-        return self._growth_stage == 4
+        if self._growth_stage == 4:
+            return "tomato"
+        return None
 
 class PlantBeans(AbstractPlant):
     def __init__(self, x, y):
@@ -181,7 +189,9 @@ class PlantBeans(AbstractPlant):
             self._growth_stage = 4
     
     def abstractHarvest(self) -> bool:
-        return self._growth_stage == 4
+        if self._growth_stage == 4:
+            return "beans"
+        return None
 
 class PlantCabbage(AbstractPlant):
     def __init__(self, x, y):
@@ -215,7 +225,9 @@ class PlantCabbage(AbstractPlant):
             self._growth_stage = 4
     
     def abstractHarvest(self) -> bool:
-        return self._growth_stage == 4
+        if self._growth_stage == 4:
+            return "cabbage"
+        return None
 
 class PlantGrape(AbstractPlant):
     def __init__(self, x, y):
@@ -250,73 +262,7 @@ class PlantGrape(AbstractPlant):
             self._growth_stage = 4
     
     def abstractHarvest(self) -> bool:
-        return self._growth_stage == 4
+        if self._growth_stage == 4:
+            return "grape"
+        return None
 
-class PlantCabbage(AbstractPlant):
-    def __init__(self, x, y):
-        super().__init__(x, y, plant_type="cabbage", maxGrowth=170)
-
-        #self.stage0 = pygame.image.load("AssetPNG/tomato/cornstage1.png").convert_alpha()
-        #self.stage1 = pygame.image.load("AssetPNG/corn/cornstage2.png").convert_alpha()
-        #self.stage2 = pygame.image.load("AssetPNG/corn/cornstage3.png").convert_alpha()
-        #self.stage3 = pygame.image.load("AssetPNG/corn/cornstage4.png").convert_alpha()
-
-        #self.stage0 = pygame.transform.scale(self.stage0, (16,16))
-        #self.stage1 = pygame.transform.scale(self.stage1, (16,16))
-        #self.stage2 = pygame.transform.scale(self.stage2,(16,16))
-        #self.stage3 = pygame.transform.scale(self.stage3, (16,16))
-
-    def abstractGrow(self):
-        if not self.isWatered:
-            self._growth_time += 1
-        else:
-            self._growth_time += 2
-
-        if self._growth_time < 50:
-            self._growth_stage = 0
-        elif self._growth_time < 100:
-            self._growth_stage = 1
-        elif self._growth_time < 150:
-            self._growth_stage = 2
-        elif self._growth_time < self._maxGrowth:
-            self._growth_stage = 3
-        else:
-            self._growth_stage = 4
-    
-    def abstractHarvest(self) -> bool:
-        return self._growth_stage == 4
-
-class PlantGrape(AbstractPlant):
-    def __init__(self, x, y):
-        super().__init__(x, y, plant_type="grape", maxGrowth=190)
-
-        #self.stage0 = pygame.image.load("AssetPNG/corn/cornstage1.png").convert_alpha()
-        #self.stage1 = pygame.image.load("AssetPNG/corn/cornstage2.png").convert_alpha()
-        #self.stage2 = pygame.image.load("AssetPNG/corn/cornstage3.png").convert_alpha()
-        #self.stage3 = pygame.image.load("AssetPNG/corn/cornstage4.png").convert_alpha()
-
-        #self.stage0 = pygame.transform.scale(self.stage0, (16,16))
-        #self.stage1 = pygame.transform.scale(self.stage1, (16,16))
-        #self.stage2 = pygame.transform.scale(self.stage2,(16,16))
-        #self.stage3 = pygame.transform.scale(self.stage3, (16,16))
-
-
-    def abstractGrow(self):
-        if not self.isWatered:
-            self._growth_time += 1
-        else:
-            self._growth_time += 2
-
-        if self._growth_time < 50:
-            self._growth_stage = 0
-        elif self._growth_time < 100:
-            self._growth_stage = 1
-        elif self._growth_time < 150:
-            self._growth_stage = 2
-        elif self._growth_time < self._maxGrowth:
-            self._growth_stage = 3
-        else:
-            self._growth_stage = 4
-    
-    def abstractHarvest(self) -> bool:
-        return self._growth_stage == 4
