@@ -4,7 +4,7 @@ from ClassObject import GREEN, WHITE, WIDTH, HEIGHT, COLOR
 from Player.Player import PlayerSteve
 from Seed.Seed import CornSeed, CarrotSeed, TomatoSeed, BeansSeed, CabbageSeed, GrapeSeed
 from Commerce_System.Shop import Shop
-from Decoration.Decor import Decoration
+from Decoration.Decor import Decoration, Scarecrow
 from Animal.Animal import animal
 from UI.InventoryMenu import InventoryMenu
 
@@ -35,7 +35,13 @@ class Game:
         self.shop_open = False
 
         self.plantingSound = pygame.mixer.Sound("PartialSound/SoundMethode/PlantHarvest.mp3")
-        self.buyingSound = pygame.mixer.Sound("PartialSound/SoundMethode/BuySell.mp3")
+        try: 
+            self.buyingSound = pygame.mixer.Sound("PartialSound/SoundMethode/BuySell.mp3")
+        except:
+           self.buyingSound = None
+
+        self.decors.append(Scarecrow(100, 100))
+        self.decors.append(Scarecrow(650, 450))
 
         self.animals.append(animal(200, 300, "chicken"))
 
@@ -75,9 +81,11 @@ class Game:
 
         seed_count = sum(self.player._inventory.items.values())
         
+        gold_text = self.font.render(f"Money: {self.player._money} gold", True, WHITE)
         seeds_text = self.font.render(f"Total Seeds: {seed_count}", True, WHITE)
         energy_text = self.font.render(f"Energy: {self.player._energy}", True, WHITE)
 
+        surface.blit(gold_text, (10, 10))
         surface.blit(seeds_text, (10, 50))
         surface.blit(energy_text, (10, 90))
 
@@ -85,7 +93,7 @@ class Game:
         plant_text = inst_font.render("SPACE / I = Inventory | H = Harvest | B = Buy | C = Sell | ESC = Exit", True, WHITE)
         surface.blit(plant_text, (10, HEIGHT - 60))
         
-        mouse_text = inst_font.render("click seed at the menu to plant", True, (0, 0, 0))
+        mouse_text = inst_font.render("Click item at the menu to use/plant/place", True, (0, 0, 0))
         surface.blit(mouse_text, (10, HEIGHT - 35))
         
         mouse_pos = pygame.mouse.get_pos()
@@ -110,8 +118,8 @@ class Game:
                 item_name, action = result
                 if action == "plant" and item_name:
                     self.plant_from_inventory(item_name)
-                    if action == "place_animal":
-                        self.place_animal_from_inventory(item_name)
+                elif action == "place_animal" and item_name:
+                    self.place_animal_from_inventory(item_name)
 
     def plant_from_inventory(self, seed_name):
         """Tplant from inventory"""
@@ -130,8 +138,16 @@ class Game:
             planted_plant = self.player.plantseed(new_seed)
             if planted_plant:
                 self.plants.append(planted_plant)
-                print(f"Menanam {seed_name}!")
+                print(f"Planting {seed_name}!")
                 self.inventory_menu.hide()
+
+    def place_animal_from_inventory(self, animal_name):
+        if self.player._inventory.hasItem(animal_name):
+            self.player.inventory.removeItem(animal_name)
+            new_animal = animal(self.player.x, self.player.y, animal_name)
+            self.animals.append(new_animal)
+            print(f"Placing {animal_name}!")
+            self.inventory_menu.hide()
 
     def handle_planting_with_menu(self, mouse_pos):
         """Handle planting via seed menu (kompatibilitas)"""
@@ -141,22 +157,22 @@ class Game:
         for tanaman in self.plants[:]:
             if tanaman.get_rect().colliderect(self.player.get_rect()):
                 if tanaman.abstractHarvest():
-                    money_earned = {
-                        "corn": 80,
-                        "carrot": 60,
-                        "tomato": 70,
-                        "beans": 65,
-                        "cabbage": 55,
-                        "grape": 75
-                    }.get(tanaman._plant_type, 50)
-                    
-                    self.player._money += money_earned
-                    self.plants.remove(tanaman)
-                    print(f"Harvested {tanaman._plant_type} for {money_earned} money!")
+                        crop_name = tanaman._plant_type
+                        self.player.inventory.addItem(crop_name)
+                        self.plants.remove(tanaman)
+                        print(f"Harvested {crop_name} and added to inventory!")
                 else:
                     print("Plant not ready to harvest yet!")
                 return
         print("No plant nearby to harvest!")
+
+    def water_nearest_plant(self):
+        for tanaman in self.plants:
+            if tanaman.get_rect().colliderect(self.player.get_rect()):
+                tanaman.waterPlant()
+                print("Watered the plant!")
+                return
+        print("No plant nearby to water!")
 
     def sell_nearest_animal(self):
       """Sell animal naerby player"""
@@ -164,7 +180,6 @@ class Game:
       min_distance = 100  
     
       for animal in self.animals:
-
         dx = animal.x - self.player.x
         dy = animal.y - self.player.y
         distance = (dx**2 + dy**2) ** 0.5
@@ -174,40 +189,65 @@ class Game:
             nearest_animal = animal
     
       if nearest_animal:
-          self.shop.sell_animal(self.player, nearest_animal, self)
-          print(f"Animal sold!")
+          success = self.shop.buyFromPlayer(player=self.player, animal=nearest_animal, game_animals_list=self.animals)
+          if success:
+                print(f"Sold {nearest_animal.name}!!")
       else:
           print("No animal nearby you! (come close to animal and click J)")
 
     def draw_shop_menu(self, surface):
-
-      menu_rect = pygame.Rect(200, 100, 400, 300)
-
+      menu_rect = pygame.Rect(200, 100, 400, 500)
       pygame.draw.rect(surface, (40, 40, 40), menu_rect)
       pygame.draw.rect(surface, (255,255,255), menu_rect, 3)
 
-      font = pygame.font.Font(None, 36)
+      font = pygame.font.Font(None, 28)
 
       items = [
-          ("corn_seed", 50),
-          ("carrot_seed", 40),
-          ("tomato_seed", 50),
+            ("corn_seed", 50),
+            ("carrot_seed", 40),
+            ("tomato_seed", 50),
+            ("beans_seed", 45),
+            ("cabbage_seed", 55),
+            ("grape_seed", 60),
+            ("chicken", 200),
+            ("cow", 500),
+            ("bull", 800)
       ]
 
       y = 150
-
       for item, price in items:
-
           item_rect = pygame.Rect(220, y, 350, 40)
-
           pygame.draw.rect(surface, (80,80,80), item_rect)
-
           text = font.render(
               f"{item} - {price} price",
               True,
               (255,255,255)
           )
+          surface.blit(text, (230, y+10))
+          y += 48
 
-          surface.blit(text, (230, y+5))
+    def handle_shop_click(self, mouse_pos):
+        if not self.shop_open:
+            return
 
-          y += 50
+        items = [
+            ("corn_seed", 50),
+            ("carrot_seed", 40),
+            ("tomato_seed", 50),
+            ("beans_seed", 45),
+            ("cabbage_seed", 55),
+            ("grape_seed", 60),
+            ("chicken", 200),
+            ("cow", 500),
+            ("bull", 800)
+        ]
+
+        y= 70
+        for item_name, price in items:
+            item_rect = pygame.Rect(220, y, 350, 40)
+            if item_rect.collidepoint(mouse_pos):
+                success = self.shop.sellToPlayer(player=self.player, item_name=item_name)
+                if success and self.buyingSound:
+                    self.buyingSound.play()
+                break
+            y += 48
