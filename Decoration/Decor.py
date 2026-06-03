@@ -2,24 +2,6 @@ import pygame
 from ClassObject import GameObject, GREEN, BROWN, RED
 from abc import ABC, abstractmethod
 
-class dekorasi(GameObject):
-    def __init__(self, x, y, tipe):
-        super().__init__(x, y, 50, 50, GREEN)
-        self.tipe = tipe
-    
-    def draw(self, surface):
-        if self.tipe == "tree":
-            pygame.draw.rect(surface, BROWN, (self.x + 20, self.y + 25, 10, 25))
-            pygame.draw.circle(surface, (34, 139, 34), (self.x + 25, self.y + 15), 18)
-            pygame.draw.circle(surface, (34, 139, 34), (self.x + 15, self.y + 22), 12)
-            pygame.draw.circle(surface, (34, 139, 34), (self.x + 35, self.y + 22), 12)
-        elif self.tipe == "fence":
-            pygame.draw.rect(surface, (160, 82, 45), (self.x, self.y, 8, 30))
-            pygame.draw.rect(surface, (160, 82, 45), (self.x + 15, self.y, 8, 30))
-            pygame.draw.rect(surface, (160, 82, 45), (self.x + 30, self.y, 8, 30))
-            pygame.draw.rect(surface, (160, 82, 45), (self.x, self.y + 12, 38, 6))
-
-
 class Decoration(GameObject, ABC):
     def __init__(self, x, y, width, height, color, name, price, durability):
         super().__init__(x, y, width, height, color)
@@ -36,7 +18,7 @@ class Decoration(GameObject, ABC):
     def remove(self):
         print(f"{self._name} removed from ({self._positionx}, {self._positiony}).")
     
-    def get_damage(self, amount):  #
+    def get_damage(self, amount):  
         self._durability -= amount
         if self._durability <= 0:
             print(f"{self._name} is broken!")
