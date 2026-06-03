@@ -51,9 +51,10 @@ class InventoryMenu:
                         
                         player._money += sell_price
                         
-                        print(f"{item_name} sold for {sell_price} money!")
-                        self.hide()
-                        return None, None
+                        sukses = game.shop.buyFromPlayer(player, item=item_name)
+                        if sukses and game.sellingSound:
+                            print(f"Sold {item_name} for {sell_price} money!")
+                        return item_name, "sell"
                     
                     if "seed" in item_name:
                         self.hide()

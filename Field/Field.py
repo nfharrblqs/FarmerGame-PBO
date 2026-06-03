@@ -156,11 +156,11 @@ class Game:
     def handle_harvest(self):
         for tanaman in self.plants[:]:
             if tanaman.get_rect().colliderect(self.player.get_rect()):
-                if tanaman.abstractHarvest():
-                        crop_name = tanaman._plant_type
-                        self.player.inventory.addItem(crop_name)
-                        self.plants.remove(tanaman)
-                        print(f"Harvested {crop_name} and added to inventory!")
+                hasil_panen = tanaman.abstractHarvest()
+                if hasil_panen is not None:
+                    self.player.inventory.addItem(hasil_panen)
+                    self.plants.remove(tanaman)
+                    print(f"Harvested {hasil_panen} and added to inventory!")
                 else:
                     print("Plant not ready to harvest yet!")
                 return
@@ -242,7 +242,7 @@ class Game:
             ("bull", 800)
         ]
 
-        y= 70
+        y= 150
         for item_name, price in items:
             item_rect = pygame.Rect(220, y, 350, 40)
             if item_rect.collidepoint(mouse_pos):
@@ -250,4 +250,4 @@ class Game:
                 if success and self.buyingSound:
                     self.buyingSound.play()
                 break
-            y += 48
+            y += 50

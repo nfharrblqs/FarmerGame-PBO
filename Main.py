@@ -38,30 +38,27 @@ def main():
                     running = False
 
             elif in_game and game:  
-                
+
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE or event.key == pygame.K_i:
+                    if event.key == pygame.K_i:
                         game.open_inventory()
                     elif event.key == pygame.K_h:
                         game.handle_harvest()
                         game.plantingSound.play()
+                    elif event.key == pygame.K_w:
+                        game.water_nearest_plant()
+                    elif event.key == pygame.K_t:
+                        game.toggle_shop()
                     elif event.key == pygame.K_b:
-                        game.shop.buy(game.player, "corn_seed")
+                        game.shop.buy(game.player, "corn_seed", "tomato_seed", "carrot_seed", "cabbage_seed", "beans_seed", "grape_seed")
                         game.buyingSound.play()
-                    elif event.key == pygame.K_p:
-                        game.shop.buy(game.player, "tomato_seed")
-                        game.buyingSound.play()
-                    elif event.key == pygame.K_7:  
-                        game.shop.buy_animal(game.player, "chicken")
-                        game.buyingSound.play()
-                    elif event.key == pygame.K_8:  
-                        game.shop.buy_animal(game.player, "cow")
-                        game.buyingSound.play()
-                    elif event.key == pygame.K_9:  
-                        game.shop.buy_animal(game.player, "bull")
+                    elif event.key == pygame.K_v:  
+                        game.shop.buy_animal(game.player, "chicken", "cow", "bull")
                         game.buyingSound.play()
                     elif event.key == pygame.K_c:
-                        game.shop.sell_item(game.player, "corn_seed")
+                        game.shop.sell_item(game.player, "corn_seed", "tomato_seed", "carrot_seed", "cabbage_seed", "beans_seed", "grape_seed")
+                    elif event.key == pygame.K_8:
+                        game.shop.sell_item(game.plants, "corn", "tomato", "carrot", "cabbage", "beans", "grape")
                     elif event.key == pygame.K_j:
                         game.sell_nearest_animal()
                     elif event.key == pygame.K_s:
