@@ -50,6 +50,9 @@ class Animal(GameObject, ABC):
     def sell(self) -> int:
         pass
 
+    def __del__(self):
+        print(f"{self.name} has been removed from the game.")
+
 
 class Cow(Animal):
     def __init__(self, x, y):
