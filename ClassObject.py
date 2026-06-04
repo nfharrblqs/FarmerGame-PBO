@@ -22,6 +22,10 @@ class GameObject:
         self.height = height
         self.color = color
 
+        self.image = pygame.Surface((width, height), pygame.SRCALPHA)
+        self.image.fill(color)
+        self.rect = self.image.get_rect(topleft=(x, y))
+        
     def draw(self, surface):
         pygame.draw.rect(
             surface,

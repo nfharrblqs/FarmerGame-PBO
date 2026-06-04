@@ -142,6 +142,7 @@ def main():
         if in_game and game:
             keys = pygame.key.get_pressed()
             game.player.move(keys)
+            game.camera.update(game.player.get_rect())
             game.update()
             screen.fill(COLOR)
             game.draw(screen)

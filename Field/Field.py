@@ -7,6 +7,7 @@ from Commerce_System.Shop import Shop
 from Decoration.Decor import Decoration, Scarecrow
 from Animal.Animal import animal
 from UI.InventoryMenu import InventoryMenu
+from camera.camera import CameraYSort
 
 class Game:
     def __init__(self, char_name="Steve"):
@@ -23,7 +24,7 @@ class Game:
         self.held_item = None
 
         self.background = None
-        self.load_background("Assetpng/map.png")
+        self.load_background("Assetpng/tanah.png")
         
         menu_width = 400
         menu_height = 500
@@ -35,6 +36,7 @@ class Game:
             menu_height
         )
         
+
         self.seed_menu = self.inventory_menu
         self.shop_open = False
 
@@ -43,11 +45,15 @@ class Game:
 
         self.animals.append(animal(200, 300, "chicken"))
 
+        self.camera = CameraYSort()
+        self.camera.add(self.player, *self.animals, *self.decors)
+        self.camera.camera_draw(self.player)
+
     def load_background(self, image_path):
         """Load bg full screen"""
         try:
             bg_image = pygame.image.load(image_path).convert()
-            self.background = pygame.transform.scale(bg_image, (WIDTH, HEIGHT))
+            self.background = pygame.image.load(image_path).convert()
             print(f"Background loaded: {image_path}")
         except:
             print(f"Background not found: {image_path}")
@@ -67,20 +73,26 @@ class Game:
         keys = pygame.key.get_pressed()
         self.check_energy_and_sleep(keys)
 
-    def draw(self, surface):
+
+    def draw(self, surface):  
+        self.player.draw(surface)
+        
         if self.background:
-            surface.blit(self.background, (0, 0))
+            surface.blit(
+                self.background,
+                (0, 0)
+    )
         else:
             surface.fill((34, 139, 34))
         
         self.shop.draw(surface)
         for decor in self.decors:
-            decor.draw(surface)
+            surface.blit(decor.image, self.camera.apply(decor.rect))
         for tanaman in self.plants:
-            tanaman.draw(surface)
+            surface.blit(tanaman.image, self.camera.apply(tanaman.rect))
         for hewan in self.animals:
-            hewan.draw(surface)
-        self.player.draw(surface)
+            surface.blit(hewan.image, self.camera.apply(hewan.rect))
+            
 
         seed_count = sum(self.player._inventory.items.values())
         
@@ -194,7 +206,7 @@ class Game:
             "grape_seed": GrapeSeed
         }
 
-        if not (200 <= self.player.x <= 600 and 200 <= self.play.y <= 500): #angka itu ganti sama koordinat field tanaman
+        if not (200 <= self.player.x <= 600 and 200 <= self.player.y <= 500): #angka itu ganti sama koordinat field tanaman
             print("You need to be in the field area to plant seeds! (come close to field and click seed in inventory)")
             return
         

@@ -72,6 +72,7 @@ class PlayerParent(GameObject, ABC):
             self.x += dx
         if 0 <= self.y + dy <= HEIGHT - self.height:
             self.y += dy
+        self.rect.topleft = (self.x, self.y)
 
     def waterPlant(self, plant):
         if self.energy >= 10:
