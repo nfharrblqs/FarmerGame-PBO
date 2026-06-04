@@ -15,9 +15,9 @@ Simple pixel-art farming game built with Python!
 
 ---------------------------------------------------------------------------------------------------
 
-## Gameplay
+## 🎮 Gameplay
 
-### 🎮 How to Play
+### How to Play
 
 1. Buy seeds
 2. Plant crops
