@@ -45,7 +45,7 @@ This project was developed as part of the Final Examination assignment for the O
 
 ---------------------------------------------------------------------------------------------------
 
-# 👥 Our Development Team 
+## 👥 Our Development Team 
 
 | Name | Student ID | Role |
 |--------------------------|
