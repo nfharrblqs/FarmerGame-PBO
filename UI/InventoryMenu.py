@@ -38,8 +38,8 @@ class InventoryMenu:
                     if self.mode == "sell":
                         success = game.shop.buyFromPlayer(player, item=item_name)
                         if success:
-                            if hasattr(game, 'sellingSound') and game.sellingSound:
-                                game.sellingSound.play()
+                           if hasattr(game, 'selling_sound') and game.selling_sound:
+                            game.selling_sound.play()
                             return item_name, "sell"
                         return None, None
                     elif self.mode == "view":
@@ -49,6 +49,9 @@ class InventoryMenu:
                         elif item_name in ["chicken", "cow", "bull"]:
                             self.hide()
                             return item_name, "place_animal"
+                        elif item_name ==  "watering_can":
+                            self.hide()
+                            return item_name, "tool"
                         else:
                             print(f"{item_name} tidak bisa ditanam (bukan benih atau hewan)")
                             return None, None
@@ -95,7 +98,7 @@ class InventoryMenu:
         pygame.draw.rect(surface, border_color, (self.x, self.y, self.width, self.height), 3)
         
 
-        title_font = pygame.font.Font(None, 48)
+        title_font = pygame.font.Font("Font/pixelFont-7-8x14-sproutLands.ttf", 30) #48)
         if self.mode == "view":
             title = title_font.render("INVENTORY", True, (0, 255, 255))
         elif self.mode == "sell":
@@ -103,20 +106,9 @@ class InventoryMenu:
         else:
             title = title_font.render("MOVE SOMETHING", True, (255, 255, 0))
         surface.blit(title, (self.x + self.width//2 - title.get_width()//2, self.y + 15))
-
-
-        sub_font = pygame.font.Font(None, 20)
-        if self.mode == "view":
-            subtitle = sub_font.render("Klik benih untuk TANAM | Klik hewan untuk KELUARKAN", True, (200, 200, 200))
-            surface.blit(subtitle, (self.x + 20, self.y + 45))
         
- 
-        money_text = sub_font.render(f"Money: {player._money}", True, (255, 215, 0))
-        surface.blit(money_text, (self.x + self.width - 120, self.y + 48))
-        
-
         y_offset = self.y + 80
-        font = pygame.font.Font(None, 32)
+        font = pygame.font.Font("Font/pixelFont-7-8x14-sproutLands.ttf", 18)
         
         if not items:
             empty_text = font.render("Inventory kosong!", True, (150, 150, 150))
@@ -132,26 +124,32 @@ class InventoryMenu:
                     color = (255, 255, 255)
                 
                 if "seed" in item_name:
-                    icon = "seed"
+                    icon = "Seed "
                     display_name = item_name.replace("_", " ").title().replace("Seed", "")
                 elif item_name == "chicken":
-                    icon = "chicken"
-                    display_name = "Ayam"
+                    icon = ""
+                    display_name = "Chicken"
                 elif item_name == "cow":
-                    icon = "cow"
-                    display_name = "Sapi"
+                    icon = ""
+                    display_name = "cow"
                 elif item_name == "bull":
-                    icon = "bull"
-                    display_name = "Banteng"
+                    icon = ""
+                    display_name = "Bull"
                 elif "corn" in item_name and "seed" not in item_name:
-                    icon = "corn"
-                    display_name = "Jagung"
+                    icon = ""
+                    display_name = "corn"
                 elif "carrot" in item_name and "seed" not in item_name:
-                    icon = "carrot"
-                    display_name = "Wortel"
+                    icon = ""
+                    display_name = "carrot"
                 elif "tomato" in item_name and "seed" not in item_name:
-                    icon = "tomao"
-                    display_name = "Tomat"
+                    icon = ""
+                    display_name = "tomato"
+                elif item_name == "watering_can":
+                    icon = ""
+                    display_name = "Watering Can"
+                elif item_name == "egg":
+                    icon = ""
+                    display_name = "Egg"
                 else:
                     icon = "inventory"
                     display_name = item_name.replace("_", " ").title()
@@ -161,16 +159,6 @@ class InventoryMenu:
                 
                 amount_text = font.render(f"x{amount}", True, (150, 150, 150))
                 surface.blit(amount_text, (self.x + self.width - 70, y_offset))
-                
-                if self.hover_index == i:
-                    hint_font = pygame.font.Font(None, 18)
-                    if "seed" in item_name:
-                        hint = hint_font.render("Klik untuk tanam", True, (0, 255, 0))
-                    elif item_name in ["chicken", "cow", "bull"]:
-                        hint = hint_font.render("Klik untuk keluarkan", True, (0, 255, 0))
-                    else:
-                        hint = hint_font.render("Klik untuk jual (mode sell)", True, (255, 255, 0))
-                    surface.blit(hint, (self.x + self.width - 160, y_offset + 25))
                 
                 y_offset += 48
         
