@@ -39,20 +39,27 @@ class Scarecrow(Decoration):
         super().__init__(x, y, 50, 50, BROWN, "Scarecrow", 150, 100)
         self._scareRadius = 100  
         self.effectiveness = 85
+
+        try:
+            self.image = pygame.image.load("AssetPNG/Decoration/Scarecrow.png").convert_alpha()
+            self.image = pygame.transform.scale(self.image, (16, 16))
+        except:
+            print("Scarecrow image not found, using default draw")
+            self.image = None
+    
     
     def scareBirds(self):
         print("Scarecrow is scaring away birds within its radius.")
     
     def draw(self, surface):
-  
-        pygame.draw.rect(surface, BROWN, (self.x + 20, self.y + 15, 10, 30))
-
-        pygame.draw.rect(surface, BROWN, (self.x + 8, self.y + 25, 34, 6))
-
-        pygame.draw.circle(surface, (200, 200, 100), (self.x + 25, self.y + 12), 12)
-
-        pygame.draw.rect(surface, (100, 50, 0), (self.x + 15, self.y + 3, 20, 8))
-        pygame.draw.rect(surface, (100, 50, 0), (self.x + 10, self.y + 8, 30, 5))
+        if self.image:
+            surface.blit(self.image, (self.x, self.y))
+        else:
+            pygame.draw.rect(surface, BROWN, (self.x + 20, self.y + 15, 10, 30))
+            pygame.draw.rect(surface, BROWN, (self.x + 8, self.y + 25, 34, 6))
+            pygame.draw.circle(surface, (200, 200, 100), (self.x + 25, self.y + 12), 12)
+            pygame.draw.rect(surface, (100, 50, 0), (self.x + 15, self.y + 3, 20, 8))
+            pygame.draw.rect(surface, (100, 50, 0), (self.x + 10, self.y + 8, 30, 5))
 
 
 class Flowerpot(Decoration):
@@ -62,6 +69,13 @@ class Flowerpot(Decoration):
         self._waterLevel = 20
         self._growth = 0 
         self._flowerBloomed = False
+
+        try:
+            self.image = pygame.image.load("AssetPNG/Decoration/Flowerpot.png").convert_alpha()
+            self.image = pygame.transform.scale(self.image, (16,16))
+        except:
+            print("Flower pot image not found use default draw")
+            self.image = None
     
     def waterPlant(self):
         self._waterLevel += 10
@@ -81,16 +95,15 @@ class Flowerpot(Decoration):
             self._waterLevel -= 0.05
         self.growFlower()
     
-    def draw(self, surface):
-   
+def draw(self, surface):
+    if self.image:
+        surface.blit(self.image, (self.x, self.y))
+    else:
         pygame.draw.rect(surface, (139, 69, 19), (self.x + 15, self.y + 25, 20, 25))
         pygame.draw.rect(surface, (100, 50, 10), (self.x + 13, self.y + 22, 24, 5))
-        
-
         pygame.draw.ellipse(surface, (101, 67, 33), (self.x + 17, self.y + 27, 16, 8))    
   
         if self._flowerBloomed:
-  
             pygame.draw.line(surface, GREEN, (self.x + 25, self.y + 27), (self.x + 25, self.y + 10), 3)
             pygame.draw.circle(surface, RED, (self.x + 25, self.y + 8), 6)
             pygame.draw.circle(surface, (255, 165, 0), (self.x + 25, self.y + 8), 3)
@@ -106,6 +119,13 @@ class GardenBench(Decoration):
         self._comfortLevel = 80
         self._occupied = False  
 
+        try:
+            self.image = pygame.image.load("AssetPNG/Decoration/GardenBench.png").convert_alpha()
+            self.image = pygame.transform.scale(self.image, (16, 16))
+        except:
+            print("Garden bench image not found")
+            self.image = None
+
     def sit(self):
         if not self._occupied:
             self._occupied = True
@@ -117,7 +137,10 @@ class GardenBench(Decoration):
         self._occupied = False
         print("Stand up from the bench.")
     
-    def draw(self, surface):
+def draw(self, surface):
+    if self.image:
+        surface.blit(self.image, (self.x, self.y))
+    else:
         pygame.draw.rect(surface, (100, 50, 10), (self.x + 5, self.y + 15, 40, 10))
         pygame.draw.rect(surface, (120, 60, 15), (self.x + 5, self.y + 25, 40, 8))
         pygame.draw.rect(surface, (50, 25, 5), (self.x + 8, self.y + 33, 4, 12))
