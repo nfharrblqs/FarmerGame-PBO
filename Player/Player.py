@@ -233,18 +233,131 @@ class PlayerSteve(PlayerParent):
 
           surface.blit(idle_frame, (self.x, self.y))
 
+
 class PlayerLuna(PlayerParent):
     def __init__(self, x, y):
         super().__init__(x, y, "Luna", 100)
         self.FavoriteSeed = "Tomato"
 
-    def plantseed(self, seed)-> str:
-        if seed in self.inventory.items:
-            self.inventory.removeItem(seed)
-            self.energy -= 10
-            if self.FavoriteSeed == seed.seed_name:
-                print(f"{self.name} planted {self.FavoriteSeed} with extra care because it's her favorite!")
+        self.direction = "down"
+
+        self.spritesheet = pygame.image.load(
+            "AssetPNG/Character/Luna/Luna.png"
+        ).convert_alpha()
+
+        self.frame_width = 32
+        self.frame_height = 32
+
+        # WALK
+        self.walk_down = []
+        self.walk_up = []
+        self.walk_right = []
+        self.walk_left = []
+
+        # IDLE
+        self.idle_down = []
+        self.idle_up = []
+        self.idle_right = []
+        self.idle_left = []
+
+        for i in range(4):
+
+            down = self.spritesheet.subsurface((i * 32, 0, 32, 32))
+            up = self.spritesheet.subsurface((i * 32, 32, 32, 32))
+            right = self.spritesheet.subsurface((i * 32, 64, 32, 32))
+
+            down = pygame.transform.scale(down, (50, 50))
+            up = pygame.transform.scale(up, (50, 50))
+            right = pygame.transform.scale(right, (50, 50))
+
+            left = pygame.transform.flip(right, True, False)
+
+            self.walk_down.append(down)
+            self.walk_up.append(up)
+            self.walk_right.append(right)
+            self.walk_left.append(left)
+
+        for i in range(4):
+
+            down = self.spritesheet.subsurface((i * 32, 96, 32, 32))
+            up = self.spritesheet.subsurface((i * 32, 128, 32, 32))
+            right = self.spritesheet.subsurface((i * 32, 160, 32, 32))
+
+            down = pygame.transform.scale(down, (50, 50))
+            up = pygame.transform.scale(up, (50, 50))
+            right = pygame.transform.scale(right, (50, 50))
+
+            left = pygame.transform.flip(right, True, False)
+
+            self.idle_down.append(down)
+            self.idle_up.append(up)
+            self.idle_right.append(right)
+            self.idle_left.append(left)
+
+        self.idle_frame = 0
+        self.walk_frame = 0
+        self.animation_timer = 0
+        self.animation_speed = 8
+        self.is_moving = False
+
+    def plantseed(self, seed_obj):
+        seed_name = seed_obj.seedName
+
+        if self._inventory.hasItem(seed_name):
+            self._inventory.removeItem(seed_name)
+            self._energy -= 10
+
+            if self.FavoriteSeed == seed_name:
+                print(f"{self.name} planted {self.FavoriteSeed} with extra care!")
             else:
-                print(f"{self.name} planted {seed.seed_name}.")
-        else : 
-            return "Seed not found in inventory."
+                print(f"{self.name} planted {seed_name}.")
+
+            return seed_obj.planted()
+
+        else:
+            print(f"No {seed_name} in inventory!")
+            return None
+
+    def draw(self, surface):
+
+        if self.direction == "down":
+            frame = self.walk_down[self.walk_frame]
+
+        elif self.direction == "up":
+            frame = self.walk_up[self.walk_frame]
+
+        elif self.direction == "right":
+            frame = self.walk_right[self.walk_frame]
+
+        elif self.direction == "left":
+            frame = self.walk_left[self.walk_frame]
+
+        self.animation_timer += 1
+
+        if self.animation_timer >= self.animation_speed:
+            self.animation_timer = 0
+
+            if self.is_moving:
+                self.walk_frame = (self.walk_frame + 1) % len(self.walk_down)
+            else:
+                self.idle_frame = (self.idle_frame + 1) % len(self.idle_down)
+
+        if self.is_moving:
+
+            surface.blit(frame, (self.x, self.y))
+
+        else:
+
+            if self.direction == "down":
+                idle_frame = self.idle_down[self.idle_frame]
+
+            elif self.direction == "up":
+                idle_frame = self.idle_up[self.idle_frame]
+
+            elif self.direction == "right":
+                idle_frame = self.idle_right[self.idle_frame]
+
+            else:
+                idle_frame = self.idle_left[self.idle_frame]
+
+            surface.blit(idle_frame, (self.x, self.y))
