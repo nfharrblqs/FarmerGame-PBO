@@ -114,20 +114,24 @@ FarmerGame-PBO/
 In this project, we implemented : 
 
 1. Inheritance
+   
    We implemented inheritance on almost all objects such as seed, plants, animals, decoration,
    characters and others.
 
 2. Encapsulation
+   
    For encapsulation is used in the player class such as energy, money, and inventory attributes.
    In the plant class encapsulation is used on plant types, growth time, growth stage, and max
    growth.
 
 3. Abstraction
+   
    Then for abstraction, the apllication  is in animal class in the soundorspeak method and sell
    method.  In the plant class there are also abstraction such as the abstractGrow and
    abstractHarvest method.
     
 4. Polymorphism
+   
    Last, polymorphism. Implementation of polymorphism is in the AbstractPlant class which defines
    abstract methods such as abstractGrow and abstractHarvest , each type of plant implements both
    methods with different growth login and harvest result. Polymorphism also implementes in the
