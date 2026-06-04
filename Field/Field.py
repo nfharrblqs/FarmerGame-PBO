@@ -7,7 +7,6 @@ from Commerce_System.Shop import Shop
 from Decoration.Decor import Decoration, Scarecrow
 from Animal.Animal import animal
 from UI.InventoryMenu import InventoryMenu
-from camera.camera import CameraYSort
 
 class Game:
     def __init__(self, char_name="Steve"):
@@ -20,14 +19,29 @@ class Game:
         self.plants = []
         self.animals = []
         self.decors = []
-        self.font = pygame.font.Font(None, 36)
+        self.font = pygame.font.Font("Font/pixelFont-7-8x14-sproutLands.ttf", 18)
         self.held_item = None
 
         self.background = None
-        self.load_background("Assetpng/tanah.png")
+        self.load_background("Assetpng/map.png")
         
         menu_width = 400
         menu_height = 500
+
+
+        self.water_mode = False
+
+        self.watering_can_img = pygame.Surface((40, 40))
+        self.watering_can_img.fill((0, 150, 255)) 
+
+        try:
+           tools = pygame.image.load("AssetPNG/Tool/watering_can.png").convert_alpha()
+           self.watering_can_img = tools.subsurface((0, 0, 16, 16))  # pojok kiri atas
+           self.watering_can_img = pygame.transform.scale(self.watering_can_img, (20, 20))
+           print("Watering can loaded!")
+        except Exception as e:
+            print(f"Error: {e}")
+
         
         self.inventory_menu = InventoryMenu(  
             WIDTH // 2 - menu_width // 2,
@@ -36,7 +50,6 @@ class Game:
             menu_height
         )
         
-
         self.seed_menu = self.inventory_menu
         self.shop_open = False
 
@@ -45,15 +58,11 @@ class Game:
 
         self.animals.append(animal(200, 300, "chicken"))
 
-        self.camera = CameraYSort()
-        self.camera.add(self.player, *self.animals, *self.decors)
-        self.camera.camera_draw(self.player)
-
     def load_background(self, image_path):
         """Load bg full screen"""
         try:
             bg_image = pygame.image.load(image_path).convert()
-            self.background = pygame.image.load(image_path).convert()
+            self.background = pygame.transform.scale(bg_image, (WIDTH, HEIGHT))
             print(f"Background loaded: {image_path}")
         except:
             print(f"Background not found: {image_path}")
@@ -73,43 +82,44 @@ class Game:
         keys = pygame.key.get_pressed()
         self.check_energy_and_sleep(keys)
 
-
-    def draw(self, surface):  
-        self.player.draw(surface)
-        
+        if self.player.money >= 500:
+            print("YOU WIN! Congratulations!")
+            return "win"  
+      
+    def draw(self, surface):
         if self.background:
-            surface.blit(
-                self.background,
-                (0, 0)
-    )
+            surface.blit(self.background, (0, 0))
         else:
             surface.fill((34, 139, 34))
         
         self.shop.draw(surface)
         for decor in self.decors:
-            surface.blit(decor.image, self.camera.apply(decor.rect))
+            decor.draw(surface)
         for tanaman in self.plants:
-            surface.blit(tanaman.image, self.camera.apply(tanaman.rect))
+            tanaman.draw(surface)
         for hewan in self.animals:
-            surface.blit(hewan.image, self.camera.apply(hewan.rect))
-            
+            hewan.draw(surface)
+        self.player.draw(surface)
+
+        if self.held_item == "watering_can":
+           surface.blit(
+              self.watering_can_img,
+             (self.player.x - 1, self.player.y + 20)
+           )
 
         seed_count = sum(self.player._inventory.items.values())
         
         gold_text = self.font.render(f"Money: {self.player._money} gold", True, WHITE)
-        seeds_text = self.font.render(f"Total Seeds: {seed_count}", True, WHITE)
         energy_text = self.font.render(f"Energy: {self.player._energy}", True, WHITE)
+        target_gold = self.font.render(f"Target: 500 gold", True, WHITE)
 
         surface.blit(gold_text, (10, 10))
-        surface.blit(seeds_text, (10, 50))
-        surface.blit(energy_text, (10, 90))
+        surface.blit(energy_text, (10, 40))
+        surface.blit(target_gold, (10, 70))
 
-        inst_font = pygame.font.Font(None, 24)
-        plant_text = inst_font.render("SPACE / I = Inventory | H = Harvest | B = Buy | C = Sell | ESC = Exit", True, WHITE)
-        surface.blit(plant_text, (10, HEIGHT - 60))
-        
-        mouse_text = inst_font.render("Click item at the menu to use/plant/place", True, (0, 0, 0))
-        surface.blit(mouse_text, (10, HEIGHT - 35))
+        inst_font = pygame.font.Font("Font/pixelFont-7-8x14-sproutLands.ttf", 12)
+        plant_text = inst_font.render("I = Inventory | H = Harvest | W = Watered | T = Shop | J = Sell animal | S = Inventory (Sell) | F = Feed | Z = Sleep ", True, WHITE)
+        surface.blit(plant_text, (10, HEIGHT - 25)) #60
         
         mouse_pos = pygame.mouse.get_pos()
         self.inventory_menu.draw(surface, self.player, mouse_pos)  
@@ -124,7 +134,7 @@ class Game:
         if self.held_item:
             mouse_pos = pygame.mouse.get_pos()
             hold_font = pygame.font.Font(None, 20)
-            hold_text = hold_font.render(f"Held: {self.held_item} (Click to use, right click to escape)", True, (255, 0, 0))
+            hold_text = hold_font.render(f"Held: {self.held_item}", True, (255, 0, 0))
             surface.blit(hold_text, (mouse_pos[0] + 15, mouse_pos[1]+ 15))
 
     def open_inventory(self):
@@ -141,7 +151,7 @@ class Game:
             result = self.inventory_menu.handle_click(mouse_pos, self.player, self)
             if result:
                 item_name, action = result
-                if action in ["plant", "place_animal"] and item_name:
+                if action in ["plant", "place_animal", "tool"] and item_name:
                     if self.player.inventory.hasItem(item_name):
                         self.held_item = item_name
                         print(f"Held item: {self.held_item} (Click on field to use)")
@@ -153,8 +163,7 @@ class Game:
         if not self.held_item:
             return
 
-        if "seed" in self.held_item:
-            seed_classes = {
+        seed_classes = {
                 "corn_seed": CornSeed,
                 "carrot_seed": CarrotSeed,
                 "tomato_seed": TomatoSeed,
@@ -163,10 +172,28 @@ class Game:
                 "grape_seed": GrapeSeed
             }
 
-            if not (200 <= mouse_pos[0] <= 600 and 200 <= mouse_pos[1] <= 500): #ganti sesuai bataas koordinat field tanaman
-                print("You need to be in the field area to plant seeds! (come close to field and click seed in inventory)")
+        if self.held_item == "watering_can":
+            for tanaman in self.plants:
+                if tanaman.get_rect().collidepoint(mouse_pos):
+                    tanaman.waterPlant()
+                    print("Watered")
+                if hasattr(self, 'watering_sound') and self.watering_sound:
+                    self.watering_sound.play()
+                self.held_item = None
                 return
-        
+            
+                
+            for tanaman in self.plants:
+                if tanaman.get_rect().colliderect(self.player.get_rect()):
+                    tanaman.waterPlant()
+                    print("nearest plant watered")
+                    if hasattr(self, 'watering_sound') and self.watering_sound:
+                         self.watering_sound.play()
+                    return
+                
+            print("click plant for watering")
+            return
+
         if self.held_item in seed_classes and self.player.inventory.hasItem(self.held_item):
             if self.player.energy >= 10:
                 seed_class = seed_classes[self.held_item]
@@ -282,11 +309,21 @@ class Game:
           print("No animal nearby you! (come close to animal and click J)")
 
     def draw_shop_menu(self, surface):
-      menu_rect = pygame.Rect(200, 100, 400, 500)
+      menu_width = 400
+      menu_height = 500
+      menu_x = (WIDTH - menu_width)// 2
+      menu_y = (HEIGHT - menu_height)//2
+
+      menu_rect = pygame.Rect(menu_x, menu_y, menu_width, menu_height)
       pygame.draw.rect(surface, (40, 40, 40), menu_rect)
       pygame.draw.rect(surface, (255,255,255), menu_rect, 3)
 
-      font = pygame.font.Font(None, 28)
+      font_title = pygame.font.Font(None, 36)
+      title = font_title.render("SHOP", True, (255, 215, 0))
+      surface.blit(title, (menu_x + menu_width//2 - title.get_width()//2, menu_y+20))
+
+
+      font = pygame.font.Font(None, 24)
 
       items = [
             ("corn_seed", 50),
@@ -300,22 +337,19 @@ class Game:
             ("bull", 800)
       ]
 
-      y = 150
+      y = menu_y + 80
       for item, price in items:
-          item_rect = pygame.Rect(220, y, 350, 40)
-          pygame.draw.rect(surface, (80,80,80), item_rect)
-          text = font.render(
-              f"{item} - {price} price",
-              True,
-              (255,255,255)
-          )
-          surface.blit(text, (230, y+10))
-          y += 48
+        item_rect = pygame.Rect(menu_x + 30, y, 340, 35)
+        pygame.draw.rect(surface, (80, 80, 80), item_rect)
+        text = font.render(f"{item} - {price} gold", True, (255, 255, 255))
+        surface.blit(text, (menu_x + 45, y + 8))
+        y += 45
+
 
     def handle_shop_click(self, mouse_pos):
         if not self.shop_open:
             return
-
+        
         items = [
             ("corn_seed", 50),
             ("carrot_seed", 40),
@@ -332,11 +366,11 @@ class Game:
         for item_name, price in items:
             item_rect = pygame.Rect(220, y, 350, 40)
             if item_rect.collidepoint(mouse_pos):
-                success = self.shop.sellToPlayer(player=self.player, item_name=item_name)
+                success = self.shop.SellToPlayer(player=self.player, item=item_name)
                 if success:
-                    import Main
-                    if hasattr(Main, 'buying_sound') and Main.buying_sound:
-                        Main.buying_sound.play()
+                   
+                    if hasattr(self, 'buying_sound') and self.buying_sound:
+                        self.buying_sound.play()
                 break
             y += 50
 
@@ -353,4 +387,3 @@ class Game:
 
                 for tanaman in self.plants:
                     tanaman.isWatered = False
-
