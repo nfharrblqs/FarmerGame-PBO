@@ -76,20 +76,35 @@ This project was developed as part of the Final Examination assignment for the O
 ## 📂 Folder Structures
 
 FarmerGame-PBO/
+
 │
+
 ├── Animal/
+
 ├── AssetAnimal/
+
 ├── AssetPNG/
+
 ├── Commerce_System/
+
 ├── Decoration/
+
 ├── Field/
+
 ├── PartialSound/
+
 ├── Player/
+
 ├── Seed/
+
 ├── UI/
+
 ├── musicBG
+
 ├── ClassObject.py
+
 ├── Main.py
+
 └── README.md
 
 ---------------------------------------------------------------------------------------------------
