@@ -1,6 +1,7 @@
 # Tiny Farmer 🌱🌟
 
 Simple pixel-art farming game built with Python.
+
 Where players can plant, harvest, raise animals and sell agricultural products!
 
 ---------------------------------------------------------------------------------------------------
@@ -64,12 +65,16 @@ This project was developed as part of the Final Examination assignment for the O
 ## ❓ How to run the game
 
 1. First you need to clone this project, use this command on Command Prompt or Terminal :
+   
    _**git clone https://github.com/nfharrblqs/FarmerGame-PBO.git**_
 2. Next, go to the project directory, use this command :
+   
    _**cd FarmerGame-PBO**_
 3. Last step, run the project! use this command :
+   
    _**python main.py**_
-4. Enjoy the game! :D
+   
+   Enjoy the game! :D
 
 ---------------------------------------------------------------------------------------------------
 
