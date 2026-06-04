@@ -3,8 +3,8 @@ import sys
 
 pygame.init()
 
-WIDTH = 800
-HEIGHT = 600
+WIDTH = 1040
+HEIGHT = 800
 
 COLOR = (0, 255, 255)
 RED = (255, 0, 0)
