@@ -92,7 +92,7 @@ class Game:
         else:
             surface.fill((34, 139, 34))
         
-        self.shop.draw(surface)
+        #self.shop.draw(surface)
         for decor in self.decors:
             decor.draw(surface)
         for tanaman in self.plants:
@@ -318,12 +318,12 @@ class Game:
       pygame.draw.rect(surface, (40, 40, 40), menu_rect)
       pygame.draw.rect(surface, (255,255,255), menu_rect, 3)
 
-      font_title = pygame.font.Font(None, 36)
+      font_title = pygame.font.Font("Font/pixelFont-7-8x14-sproutLands.ttf", 36)
       title = font_title.render("SHOP", True, (255, 215, 0))
       surface.blit(title, (menu_x + menu_width//2 - title.get_width()//2, menu_y+20))
 
 
-      font = pygame.font.Font(None, 24)
+      font = pygame.font.Font("Font/pixelFont-7-8x14-sproutLands.ttf", 18)
 
       items = [
             ("corn_seed", 50),

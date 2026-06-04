@@ -136,7 +136,7 @@ class animal(Animal):
 
         try:
             if "chicken" in self.tipe:
-                sheet = pygame.image.load("AssetAnimal/chickenmale/ChickenRed.png").convert_alpha()
+                sheet = pygame.image.load("AssetAnimal/chickenmale/Chicken Red.png").convert_alpha()
                 for i in range(4):
                     frame = sheet.subsurface((i * 16, 0, 16, 16))
                     frame = pygame.transform.scale(frame, (25,25))
@@ -146,7 +146,7 @@ class animal(Animal):
 
         try:
              if "cow" in self.tipe:
-                sheet = pygame.image.load("AssetAnimal/femalecow/FemaleCowBrown.png").convert_alpha()
+                sheet = pygame.image.load("AssetAnimal/femalecow/Female Cow Brown.png").convert_alpha()
                 for i in range(4):
                     frame = sheet.subsurface((i * 16, 0, 16, 16))
                     frame = pygame.transform.scale(frame, (25,25))
@@ -156,7 +156,7 @@ class animal(Animal):
 
         try:
              if "bull" in self.tipe:
-                sheet = pygame.image.load("AssetAnimal/malecow/MaleCowBrown.png").convert_alpha()
+                sheet = pygame.image.load("AssetAnimal/malecow/Male Cow Brown.png").convert_alpha()
                 for i in range(4):
                     frame = sheet.subsurface((i * 16, 0, 16, 16))
                     frame = pygame.transform.scale(frame, (25,25))
