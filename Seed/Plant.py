@@ -78,23 +78,24 @@ class PlantCorn(AbstractPlant):
     def abstractHarvest(self) -> bool:
         if self._growth_stage == 4:
             return "corn"
-        return None
-    
+        return None    
 
 
 class PlantCarrot(AbstractPlant):
     def __init__(self, x, y):
         super().__init__(x, y, plant_type="carrot", maxGrowth=150)
 
-        #self.stage0 = pygame.image.load("AssetPNG/corn/cornstage1.png").convert_alpha()
-        #self.stage1 = pygame.image.load("AssetPNG/corn/cornstage2.png").convert_alpha()
-        #self.stage2 = pygame.image.load("AssetPNG/corn/cornstage3.png").convert_alpha()
-        #self.stage3 = pygame.image.load("AssetPNG/corn/cornstage4.png").convert_alpha()
+        self.stage0 = pygame.image.load("AssetPNG/Carrot/Carrot1.png").convert_alpha()
+        self.stage1 = pygame.image.load("AssetPNG/Carrot/Carrot2.png").convert_alpha()
+        self.stage2 = pygame.image.load("AssetPNG/Carrot/Carrot3.png").convert_alpha()
+        self.stage3 = pygame.image.load("AssetPNG/Carrot/Carrot4.png").convert_alpha()
+        self.stage4 = pygame.image.load("AssetPNG/Carrot/Carrot5.png").convert_alpha()
 
-        #self.stage0 = pygame.transform.scale(self.stage0, (16,16))
-        #self.stage1 = pygame.transform.scale(self.stage1, (16,16))
-        #self.stage2 = pygame.transform.scale(self.stage2,(16,16))
-        #self.stage3 = pygame.transform.scale(self.stage3, (16,16))
+        self.stage0 = pygame.transform.scale(self.stage0, (16,16))
+        self.stage1 = pygame.transform.scale(self.stage1, (16,16))
+        self.stage2 = pygame.transform.scale(self.stage2,(16,16))
+        self.stage3 = pygame.transform.scale(self.stage3, (16,16))
+        self.stage4 = pygame.transform.scale(self.stage4, (16,16))
 
 
     def abstractGrow(self):
@@ -161,15 +162,17 @@ class PlantBeans(AbstractPlant):
     def __init__(self, x, y):
         super().__init__(x, y, plant_type="beans", maxGrowth=200)
         
-        #self.stage0 = pygame.image.load("AssetPNG/corn/cornstage1.png").convert_alpha()
-        #self.stage1 = pygame.image.load("AssetPNG/corn/cornstage2.png").convert_alpha()
-        #self.stage2 = pygame.image.load("AssetPNG/corn/cornstage3.png").convert_alpha()
-        #self.stage3 = pygame.image.load("AssetPNG/corn/cornstage4.png").convert_alpha()
+        self.stage0 = pygame.image.load("AssetPNG/Beans/Beans1.png").convert_alpha()
+        self.stage1 = pygame.image.load("AssetPNG/Beans/Beans2.png").convert_alpha()
+        self.stage2 = pygame.image.load("AssetPNG/Beans/Beans3.png").convert_alpha()
+        self.stage3 = pygame.image.load("AssetPNG/Beans/Beans4.png").convert_alpha()
+        self.stage4 = pygame.image.load("AssetPNG/Beans/Beans5.png").convert_alpha()
 
-        #self.stage0 = pygame.transform.scale(self.stage0, (16,16))
-        #self.stage1 = pygame.transform.scale(self.stage1, (16,16))
-        #self.stage2 = pygame.transform.scale(self.stage2,(16,16))
-        #self.stage3 = pygame.transform.scale(self.stage3, (16,16))
+        self.stage0 = pygame.transform.scale(self.stage0, (16,16))
+        self.stage1 = pygame.transform.scale(self.stage1, (16,16))
+        self.stage2 = pygame.transform.scale(self.stage2,(16,16))
+        self.stage3 = pygame.transform.scale(self.stage3, (16,16))
+        self.stage4 = pygame.transform.scale(self.stage4, (16,16))
 
     def abstractGrow(self):
         if not self.isWatered:
@@ -197,15 +200,19 @@ class PlantCabbage(AbstractPlant):
     def __init__(self, x, y):
         super().__init__(x, y, plant_type="cabbage", maxGrowth=170)
 
-        #self.stage0 = pygame.image.load("AssetPNG/tomato/cornstage1.png").convert_alpha()
-        #self.stage1 = pygame.image.load("AssetPNG/corn/cornstage2.png").convert_alpha()
-        #self.stage2 = pygame.image.load("AssetPNG/corn/cornstage3.png").convert_alpha()
-        #self.stage3 = pygame.image.load("AssetPNG/corn/cornstage4.png").convert_alpha()
 
-        #self.stage0 = pygame.transform.scale(self.stage0, (16,16))
-        #self.stage1 = pygame.transform.scale(self.stage1, (16,16))
-        #self.stage2 = pygame.transform.scale(self.stage2,(16,16))
-        #self.stage3 = pygame.transform.scale(self.stage3, (16,16))
+        self.stage0 = pygame.image.load("AssetPNG/Cabbage/Cabbage1.png").convert_alpha()
+        self.stage1 = pygame.image.load("AssetPNG/Cabbage/Cabbage2.png").convert_alpha()
+        self.stage2 = pygame.image.load("AssetPNG/Cabbage/Cabbage3.png").convert_alpha()
+        self.stage3 = pygame.image.load("AssetPNG/Cabbage/Cabbage4.png").convert_alpha()
+        self.stage4 = pygame.image.load("AssetPNG/Cabbage/Cabbage5.png").convert_alpha()
+
+        self.stage0 = pygame.transform.scale(self.stage0, (16,16))
+        self.stage1 = pygame.transform.scale(self.stage1, (16,16))
+        self.stage2 = pygame.transform.scale(self.stage2,(16,16))
+        self.stage3 = pygame.transform.scale(self.stage3, (16,16))
+        self.stage4 = pygame.transform.scale(self.stage4, (16,16))
+
 
     def abstractGrow(self):
         if not self.isWatered:
@@ -233,15 +240,17 @@ class PlantGrape(AbstractPlant):
     def __init__(self, x, y):
         super().__init__(x, y, plant_type="grape", maxGrowth=190)
 
-        #self.stage0 = pygame.image.load("AssetPNG/corn/cornstage1.png").convert_alpha()
-        #self.stage1 = pygame.image.load("AssetPNG/corn/cornstage2.png").convert_alpha()
-        #self.stage2 = pygame.image.load("AssetPNG/corn/cornstage3.png").convert_alpha()
-        #self.stage3 = pygame.image.load("AssetPNG/corn/cornstage4.png").convert_alpha()
+        self.stage0 = pygame.image.load("AssetPNG/Grape/Grape1.png").convert_alpha()
+        self.stage1 = pygame.image.load("AssetPNG/Grape/Grape2.png").convert_alpha()
+        self.stage2 = pygame.image.load("AssetPNG/Grape/Grape3.png").convert_alpha()
+        self.stage3 = pygame.image.load("AssetPNG/Grape/Grape4.png").convert_alpha()
+        self.stage4 = pygame.image.load("AssetPNG/Grape/Grape5.png").convert_alpha()
 
-        #self.stage0 = pygame.transform.scale(self.stage0, (16,16))
-        #self.stage1 = pygame.transform.scale(self.stage1, (16,16))
-        #self.stage2 = pygame.transform.scale(self.stage2,(16,16))
-        #self.stage3 = pygame.transform.scale(self.stage3, (16,16))
+        self.stage0 = pygame.transform.scale(self.stage0, (16,16))
+        self.stage1 = pygame.transform.scale(self.stage1, (16,16))
+        self.stage2 = pygame.transform.scale(self.stage2,(16,16))
+        self.stage3 = pygame.transform.scale(self.stage3, (16,16))
+        self.stage4 = pygame.transform.scale(self.stage4, (16,16))
 
 
     def abstractGrow(self):
@@ -265,4 +274,3 @@ class PlantGrape(AbstractPlant):
         if self._growth_stage == 4:
             return "grape"
         return None
-
