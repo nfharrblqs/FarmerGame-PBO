@@ -10,11 +10,11 @@ class LoadingScreen:
         self.characters = ["Steve", "Luna"]
         self.selected_char_index = 0
 
-        self.font_input = pygame.font.Font(None, 28)
-        self.font_title = pygame.font.Font(None, 24)
+        self.font_input = pygame.font.Font("Font/pixelFont-7-8x14-sproutLands.ttf", 18)
+        self.font_title = pygame.font.Font("Font/pixelFont-7-8x14-sproutLands.ttf", 18)
 
-        self.steve_rect = pygame.Rect(WIDTH // 2 -110, 210, 100, 40)
-        self.luna_rect = pygame.Rect(WIDTH // 2 + 10, 210, 100, 40)
+        self.steve_rect = pygame.Rect(WIDTH // 2 - 92, 450, 100, 40) 
+        self.luna_rect = pygame.Rect(WIDTH // 2 + 28, 450, 100, 40)
 
         try:
             self.background = pygame.image.load("AssetPNG/Startpage/barugamestart.png").convert_alpha()
@@ -82,19 +82,6 @@ class LoadingScreen:
         else:
             surface.fill((30, 30, 50))
 
-       # start_x = 350
-        #start_y = 290
-
-        #exit_x = 350
-        #exit_y = 340
-
-        #start_center = (420,309)
-        #exit_center = (420, 359)
-
-        #self.start_rect = pygame.Rect(start_x, start_y,self.button_width, self.button_height)
-
-        #self.exit_rect = pygame.Rect(exit_x, exit_y,self.button_width, self.button_height)
-
         mouse_pos = pygame.mouse.get_pos()
 
         if self.start_button:
@@ -107,8 +94,6 @@ class LoadingScreen:
         else:
             pygame.draw.rect(surface, (0, 200, 0), self.start_rect)
 
-        #self.start_rect = start_img.get_rect(center = start_center)
-
         if self.exit_button:
             if self.exit_rect.collidepoint(mouse_pos):
                 exit_img = pygame.transform.scale(self.exit_button, (130, 35))
@@ -119,20 +104,18 @@ class LoadingScreen:
         else:
             pygame.draw.rect(surface, (200, 0, 0), self.exit_rect)
             
-        #self.exit_rect = exit_img.get_rect(center = exit_center)
-
 
         title_surf = self.font_title.render("CHOOSE YOUR CHARACTER:", True, WHITE)
-        surface.blit(title_surf, (WIDTH // 2 - title_surf.get_width() // 2, 175))
+        surface.blit(title_surf, (WIDTH // 2 - title_surf.get_width() // 2 + 18, 420))
 
         steve_border = (0, 255, 0) if self.selected_char_index == 0 else (100, 100, 100)
-        pygame.draw.rect(surface, (50, 50, 70), self.steve_rect)
+        pygame.draw.rect(surface, (101, 67, 33), self.steve_rect)
         pygame.draw.rect(surface, steve_border, self.steve_rect, 3 if self.selected_char_index == 0 else 1)
         steve_text = self.font_input.render("Steve", True, WHITE)
         surface.blit(steve_text, (self.steve_rect.centerx - steve_text.get_width() // 2, self.steve_rect.centery - steve_text.get_height() // 2))
 
         luna_border = (0, 255, 0) if self.selected_char_index == 1 else (100, 100, 100)
-        pygame.draw.rect(surface, (50, 50, 70), self.luna_rect)
+        pygame.draw.rect(surface, (101, 67, 33), self.luna_rect)
         pygame.draw.rect(surface, luna_border, self.luna_rect, 3 if self.selected_char_index == 1 else 1)
         luna_text = self.font_input.render("Luna", True, WHITE)
         surface.blit(luna_text, (self.luna_rect.centerx - luna_text.get_width() // 2, self.luna_rect.centery - luna_text.get_height() // 2))
