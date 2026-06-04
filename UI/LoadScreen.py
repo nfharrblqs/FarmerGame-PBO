@@ -1,5 +1,5 @@
 import pygame
-from ClassObject import WHITE, WIDTH, HEIGHT
+from ClassObject import WHITE, WIDTH, HEIGHT, BLACK
 
 class LoadingScreen:
     def __init__(self):
@@ -13,8 +13,8 @@ class LoadingScreen:
         self.font_input = pygame.font.Font("Font/pixelFont-7-8x14-sproutLands.ttf", 18)
         self.font_title = pygame.font.Font("Font/pixelFont-7-8x14-sproutLands.ttf", 18)
 
-        self.steve_rect = pygame.Rect(WIDTH // 2 - 92, 450, 100, 40) 
-        self.luna_rect = pygame.Rect(WIDTH // 2 + 28, 450, 100, 40)
+        self.steve_rect = pygame.Rect(WIDTH // 2 - 110, 450, 100, 40) 
+        self.luna_rect = pygame.Rect(WIDTH // 2 + 10, 450, 100, 40)
 
         try:
             self.background = pygame.image.load("AssetPNG/Startpage/barugamestart.png").convert_alpha()
@@ -27,8 +27,8 @@ class LoadingScreen:
         self.button_width = 140
         self.button_height = 38
 
-        self.start_center = (420, 320)
-        self.exit_center = (420, 380)
+        self.start_center = (WIDTH // 2, 525)
+        self.exit_center = (WIDTH // 2, 575)
 
         try:
             self.start_button = pygame.image.load("AssetPNG/Startpage/StartButton.png").convert_alpha()
@@ -105,8 +105,8 @@ class LoadingScreen:
             pygame.draw.rect(surface, (200, 0, 0), self.exit_rect)
             
 
-        title_surf = self.font_title.render("CHOOSE YOUR CHARACTER:", True, WHITE)
-        surface.blit(title_surf, (WIDTH // 2 - title_surf.get_width() // 2 + 18, 420))
+        title_surf = self.font_title.render("CHOOSE YOUR CHARACTER:", True, BLACK)
+        surface.blit(title_surf, (WIDTH // 2 - title_surf.get_width() // 2 + 8, 420))
 
         steve_border = (0, 255, 0) if self.selected_char_index == 0 else (100, 100, 100)
         pygame.draw.rect(surface, (101, 67, 33), self.steve_rect)

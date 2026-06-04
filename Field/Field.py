@@ -23,7 +23,7 @@ class Game:
         self.held_item = None
 
         self.background = None
-        self.load_background("Assetpng/map.png")
+        self.load_background("Assetpng/tanah.png")
         
         menu_width = 400
         menu_height = 500
