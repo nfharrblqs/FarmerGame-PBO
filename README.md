@@ -152,6 +152,24 @@ In this project, we implemented :
 
 ### Planting 
 ![Gameplay](Screenshot/PlantingSeeds.png)
+
+### Animals
+![Gameplay](Screenshot/Animals.png)
+
+### Shop
+![Gameplay](Screenshot/Shop.png)
+
+### Sell
+![Gameplay](Screenshot/SeelingMenu.png)
+
+### Inventory 
+![Gameplay](Screenshot/InventoryMenu.png)
+
+### Gameplay
+![Gameplay](Screenshot/GamePlay.png)
+
+### Win
+![Gameplay](Screenshot/WinScreen.png)
 ---------------------------------------------------------------------------------------------------
 
 ## 💡 Feedback
