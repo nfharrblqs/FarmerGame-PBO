@@ -1,23 +1,16 @@
 # Tiny Farmer 🌱🌟
 
-Simple pixel-art farming game built with Python.
-
-Where players can plant, harvest, raise animals and sell agricultural products!
+Simple pixel-art farming game built with Python where players can plant crops, raise animals, harvest products and build their farm!
 
 ---------------------------------------------------------------------------------------------------
 
 ## 👥 Our Development Team 
 
 | Name | Student ID | Role |
-
-|--------------------------|
-
+|------|------------|------|
 | Nafiah Aurora Balqis | 25051204140 | Lead Programmer |
-
 | Putri Natasyah Mumpuni | 25051204146 | Gameplay Programmer |
-
 | Michelle Cein Aurelia | 25051204206 | Game Designer |
-
 | Raffles Adaby Ihwan | 25051204096 | UI & UX Designer |
 
 ---------------------------------------------------------------------------------------------------
@@ -78,39 +71,28 @@ This project was developed as part of the Final Examination assignment for the O
 
 ---------------------------------------------------------------------------------------------------
 
-## 📂 Folder Structures
+## 📂 Folder Structure
 
+```text
 FarmerGame-PBO/
-
 │
-
 ├── Animal/
-
 ├── AssetAnimal/
-
 ├── AssetPNG/
-
 ├── Commerce_System/
-
 ├── Decoration/
-
 ├── Field/
-
+├── Font/
 ├── PartialSound/
-
 ├── Player/
-
+├── Screenshot/
 ├── Seed/
-
 ├── UI/
-
-├── musicBG
-
+├── musicBG/
 ├── ClassObject.py
-
 ├── Main.py
-
 └── README.md
+```
 
 ---------------------------------------------------------------------------------------------------
 
@@ -139,7 +121,7 @@ In this project, we implemented :
    
    Last, polymorphism. Implementation of polymorphism is in the AbstractPlant class which defines
    abstract methods such as abstractGrow and abstractHarvest , each type of plant implements both
-   methods with different growth login and harvest result. Polymorphism also implementes in the
+   methods with different growth logic and harvest result. Polymorphism also implemented in the
    decoration class with the abstract draw method, each child class implements the method with a
    different form according to the form of the decoration.
 
@@ -147,7 +129,29 @@ In this project, we implemented :
 
 ## 📸 Screenshots
 
+### Main Menu
+![Gameplay](Screenshot/MainMenu.png)
 
+### Planting 
+![Gameplay](Screenshot/PlantingSeeds.png)
+
+### Animals
+![Gameplay](Screenshot/Animals.png)
+
+### Shop
+![Gameplay](Screenshot/Shop.png)
+
+### Sell
+![Gameplay](Screenshot/SeelingMenu.png)
+
+### Inventory 
+![Gameplay](Screenshot/InventoryMenu.png)
+
+### Gameplay
+![Gameplay](Screenshot/GamePlay.png)
+
+### Win
+![Gameplay](Screenshot/WinScreen.png)
 
 ---------------------------------------------------------------------------------------------------
 
