@@ -23,7 +23,7 @@ class Game:
         self.held_item = None
 
         self.background = None
-        self.load_background("Assetpng/tanah.png")
+        self.load_background("Assetpng/map.png")
         
         menu_width = 400
         menu_height = 500
@@ -56,7 +56,7 @@ class Game:
         self.decors.append(Scarecrow(100, 100))
         self.decors.append(Scarecrow(650, 450))
 
-        self.animals.append(animal(200, 300, "chicken"))
+        self.animals.append(animal(823, 251, "chicken"))
 
     def load_background(self, image_path):
         """Load bg full screen"""

@@ -6,6 +6,9 @@ from abc import ABC, abstractmethod
 class Animal(GameObject, ABC):
     def __init__(self, x, y, name: str, age: int, weight: float, hunger: int = 100):
         super().__init__(x, y, 40, 40, WHITE)
+        self.home_x = x
+        self.home_y = y
+        self.wander_radius = 35
         self.name = name
         self.age = age
         self.weight = weight
@@ -30,6 +33,13 @@ class Animal(GameObject, ABC):
         if self.x <= 0 or self.x >= WIDTH - self.width:
             self.direction[0] *= -1 
         if self.y <= 0 or self.y >= HEIGHT - self.height:
+            self.direction[1] *= -1
+
+        # batas radius dari tempat spawn
+        if abs(self.x - self.home_x) > self.wander_radius:
+            self.direction[0] *= -1
+
+        if abs(self.y - self.home_y) > self.wander_radius:
             self.direction[1] *= -1
     
     def eating(self, eat_amount: int):
