@@ -82,7 +82,7 @@ class Game:
         keys = pygame.key.get_pressed()
         self.check_energy_and_sleep(keys)
 
-        if self.player.money >= 500:
+        if self.player.money >= 1000:
             print("YOU WIN! Congratulations!")
             return "win"  
       
@@ -111,7 +111,7 @@ class Game:
         
         gold_text = self.font.render(f"Money: {self.player._money} gold", True, WHITE)
         energy_text = self.font.render(f"Energy: {self.player._energy}", True, WHITE)
-        target_gold = self.font.render(f"Target: 500 gold", True, WHITE)
+        target_gold = self.font.render(f"Target: 1000 gold", True, WHITE)
 
         surface.blit(gold_text, (10, 10))
         surface.blit(energy_text, (10, 40))
@@ -347,32 +347,40 @@ class Game:
 
 
     def handle_shop_click(self, mouse_pos):
-        if not self.shop_open:
-            return
-        
-        items = [
-            ("corn_seed", 50),
-            ("carrot_seed", 40),
-            ("tomato_seed", 50),
-            ("beans_seed", 45),
-            ("cabbage_seed", 55),
-            ("grape_seed", 60),
-            ("chicken", 200),
-            ("cow", 500),
-            ("bull", 800)
-        ]
+      if not self.shop_open:
+        return
 
-        y= 150
-        for item_name, price in items:
-            item_rect = pygame.Rect(220, y, 350, 40)
-            if item_rect.collidepoint(mouse_pos):
-                success = self.shop.SellToPlayer(player=self.player, item=item_name)
-                if success:
-                   
-                    if hasattr(self, 'buying_sound') and self.buying_sound:
-                        self.buying_sound.play()
-                break
-            y += 50
+      menu_width = 400
+      menu_height = 500
+      menu_x = (WIDTH - menu_width) // 2
+      menu_y = (HEIGHT - menu_height) // 2
+
+      items = [
+        ("corn_seed", 50),
+        ("carrot_seed", 40),
+        ("tomato_seed", 50),
+        ("beans_seed", 45),
+        ("cabbage_seed", 55),
+        ("grape_seed", 60),
+        ("chicken", 200),
+        ("cow", 500),
+        ("bull", 800)
+      ]
+
+      y = menu_y + 80  
+
+      for item_name, price in items:
+        item_rect = pygame.Rect(menu_x + 30, y, 340, 35)
+
+        if item_rect.collidepoint(mouse_pos):
+            success = self.shop.SellToPlayer(player=self.player, item=item_name)
+
+            if success:
+                if hasattr(self, 'buying_sound') and self.buying_sound:
+                    self.buying_sound.play()
+            break
+
+        y += 45
 
     def check_energy_and_sleep(self, keys):
         if self.player.energy <= 0:
