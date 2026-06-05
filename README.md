@@ -147,8 +147,11 @@ In this project, we implemented :
 
 ## 📸 Screenshots
 
+### Main Menu
+![Gameplay](Screenshot/MainMenu.png)
 
-
+### Planting 
+![Gameplay](Screenshot/PlantingSeeds.png)
 ---------------------------------------------------------------------------------------------------
 
 ## 💡 Feedback
