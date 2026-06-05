@@ -127,9 +127,9 @@ class Game:
         if self.shop_open:
            self.draw_shop_menu(surface)
         
-        if self.player.x < 100 and self.player.y < 100:
-            bed_text = self.font.render("Press z to sleep.", True, WHITE)
-            surface.blit(bed_text, (120, 20))
+        if 380 <= self.player.x <= 450 and 130 <= self.player.y <= 190:
+            bed_text = self.font.render("Press Z to sleep.", True, WHITE)
+            surface.blit(bed_text, (350, 110))
 
         if self.held_item:
             mouse_pos = pygame.mouse.get_pos()
@@ -388,7 +388,7 @@ class Game:
         else:
             self.player.speed=5
 
-        if self.player.x < 100 and self.player.y < 100: #angka ganti sama koordint bed
+        if 380 <= self.player.x <= 450 and 130 <= self.player.y <= 190: #angka ganti sama koordint bed
             if keys[pygame.K_z]:
                 self.player.energy = 100
                 print("Sleeping... Energy restored to 100!")
