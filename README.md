@@ -9,15 +9,10 @@ Where players can plant, harvest, raise animals and sell agricultural products!
 ## 👥 Our Development Team 
 
 | Name | Student ID | Role |
-
-|--------------------------|
-
+|------|------------|------|
 | Nafiah Aurora Balqis | 25051204140 | Lead Programmer |
-
 | Putri Natasyah Mumpuni | 25051204146 | Gameplay Programmer |
-
 | Michelle Cein Aurelia | 25051204206 | Game Designer |
-
 | Raffles Adaby Ihwan | 25051204096 | UI & UX Designer |
 
 ---------------------------------------------------------------------------------------------------
@@ -170,6 +165,7 @@ In this project, we implemented :
 
 ### Win
 ![Gameplay](Screenshot/WinScreen.png)
+
 ---------------------------------------------------------------------------------------------------
 
 ## 💡 Feedback
