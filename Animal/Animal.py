@@ -67,7 +67,7 @@ class Animal(GameObject, ABC):
 class Cow(Animal):
     def __init__(self, x, y):
         super().__init__(x, y, name="cow", age=1, weight=150.0, hunger=100)
-        self.speed = 0.5
+        self.speed = 0.1
         self.milkamount = 0.0
         self.pregnant = False
 
@@ -103,7 +103,7 @@ class Chicken(Animal):
 class Bull(Animal):
     def __init__(self, x, y):
         super().__init__(x, y, name="bull", age=1, weight=500.0, hunger=100)
-        self.speed = 1
+        self.speed = 0.1
         self.horn_length = 15.5
         self.strength = 80
     
@@ -127,50 +127,86 @@ class animal(Animal):
             super().__init__(x, y, "Chicken", 1, 2.0, 100)
             self.color = RED
             self.speed = 0.5
+            self.animation_rows = 1  
         elif "cow" in self.tipe:
             super().__init__(x, y, "Cow", 2, 150.0, 100)
             self.color = BROWN
-            self.speed = 1
-        else:
+            self.speed = 0.5
+            self.animation_rows = 3  
+        else:  # bull
             super().__init__(x, y, "Bull", 3, 200.0, 100)
             self.color = BROWN
-            self.speed = 1
+            self.speed = 0.5
+            self.animation_rows = 3  
 
         self.last_update_time = pygame.time.get_ticks()
         self.last_production_time = pygame.time.get_ticks()
 
-        self.frames = []
+        self.frames = [] 
         self.current_frame = 0
         self.animation_timer = 0
         self.animation_speed = 10
+        self.current_direction = "right" 
 
+        self.load_animations()
+
+    def load_animations(self):
+        """Load animations for different directions"""
         try:
             if "chicken" in self.tipe:
                 sheet = pygame.image.load("AssetAnimal/chickenmale/Chicken Red.png").convert_alpha()
+               
+                frames_row = []
                 for i in range(4):
                     frame = sheet.subsurface((i * 16, 0, 16, 16))
-                    frame = pygame.transform.scale(frame, (25,25))
-                    self.frames.append(frame)
-        except Exception as e:
-            print(f"Animal sprite error: {e}")
-
-        try:
-             if "cow" in self.tipe:
+                    frame = pygame.transform.scale(frame, (25, 25))
+                    frames_row.append(frame)
+                self.frames = frames_row  
+                
+            elif "cow" in self.tipe:
                 sheet = pygame.image.load("AssetAnimal/femalecow/Female Cow Brown.png").convert_alpha()
+        
+                self.frames = {"left": [], "down": [], "up": []}
+                
                 for i in range(4):
-                    frame = sheet.subsurface((i * 16, 0, 16, 16))
-                    frame = pygame.transform.scale(frame, (25,25))
-                    self.frames.append(frame)
-        except Exception as e:
-            print(f"Animal sprite error: {e}")
-
-        try:
-             if "bull" in self.tipe:
+                    frame = sheet.subsurface((i * 32, 0, 32, 32))
+                    frame = pygame.transform.scale(frame, (50, 50))
+                    self.frames["left"].append(frame)
+                
+             
+                for i in range(4):
+                    frame = sheet.subsurface((i * 32, 32, 32, 32))
+                    frame = pygame.transform.scale(frame, (50, 50))
+                    self.frames["down"].append(frame)
+                
+             
+                for i in range(4):
+                    frame = sheet.subsurface((i * 32, 64, 32, 32))
+                    frame = pygame.transform.scale(frame, (50, 50))
+                    self.frames["up"].append(frame)
+                    
+            elif "bull" in self.tipe:
                 sheet = pygame.image.load("AssetAnimal/malecow/Male Cow Brown.png").convert_alpha()
+            
+                self.frames = {"left": [], "down": [], "up": []}
+                
                 for i in range(4):
-                    frame = sheet.subsurface((i * 16, 0, 16, 16))
-                    frame = pygame.transform.scale(frame, (25,25))
-                    self.frames.append(frame)
+                    frame = sheet.subsurface((i * 32, 0, 32, 32))
+                    frame = pygame.transform.scale(frame, (50, 50))
+                    self.frames["left"].append(frame)  
+          
+                for i in range(4):
+                    frame = sheet.subsurface((i * 32, 32, 32, 32))
+                    frame = pygame.transform.scale(frame, (50, 50))
+                    self.frames["down"].append(frame)
+                  
+                for i in range(4):
+                    frame = sheet.subsurface((i * 32, 64, 32, 32))
+                    frame = pygame.transform.scale(frame, (50, 50))
+                    self.frames["up"].append(frame)
+
+            
+                    
         except Exception as e:
             print(f"Animal sprite error: {e}")
 
@@ -179,16 +215,42 @@ class animal(Animal):
             self.animation_timer += 1
             if self.animation_timer >= self.animation_speed:
                 self.animation_timer = 0
-                self.current_frame = (self.current_frame + 1) % len(self.frames)
+                self.current_frame = (self.current_frame + 1) % 4 
+            
+            if "chicken" in self.tipe:
+                frame = self.frames[self.current_frame]
+                if self.direction[0] > 0:
+                    frame = pygame.transform.flip(frame, True, False)
+            else:
+              
+                if self.direction[1] < 0:  
+                    direction_key = "up"
+                elif self.direction[1] > 0:  
+                    direction_key = "down"
+                else:  
+                    direction_key = "left"
+                frame = self.frames[direction_key][self.current_frame]
 
-            frame = self.frames[self.current_frame]
-
-            if self.direction[0] >0:
-                 frame = pygame.transform.flip(frame, True, False)
-
+                if self.direction[0] > 0:  
+                    frame = pygame.transform.flip(frame, True, False)
+                if direction_key == "left" and self.direction[0] > 0:
+                    frame = self.frames["left"][self.current_frame]
+                    frame = pygame.transform.flip(frame, True, False)
+                else:
+                    frame = self.frames[direction_key][self.current_frame]
+            
             surface.blit(frame, (self.x, self.y))
         else:
             super().draw(surface)
+
+    def moverandom(self):
+        old_x = self.x
+        self.move()
+        
+        if self.x > old_x:
+            self.last_direction = "right"
+        elif self.x < old_x:
+            self.last_direction = "left"
 
     def __del__(self):
         print(f"Destructor: Object {self.name} has been removed from the game.")
@@ -209,20 +271,11 @@ class animal(Animal):
         if "bull" in self.tipe:
             return 800
         return 400
-    
-    def moverandom(self):
-        old_x = self.x
-        self.move()
-
-        if self.x > old_x:
-            self.last_direction = "right"
-        elif self.x < old_x:
-            self.last_direction = "left"
 
     def update_hunger(self, player_inventory, game_animals_list):
         current_time = pygame.time.get_ticks()
         if current_time - self.last_update_time > 8000:  
-            self.hunger -= 2
+            self.hunger -= 10
             self.last_update_time = current_time
             print(f"{self.name} hunger decreased to {self.hunger}%")
             if self.hunger <= 0:
@@ -244,7 +297,7 @@ class animal(Animal):
     def produce_goods(self, player_inventory):
         if self.hunger > 40:
             current_time = pygame.time.get_ticks()
-
+            
             if current_time - self.last_production_time > 15000:
                 self.last_production_time = current_time
                 
