@@ -233,7 +233,7 @@ class Game:
             "grape_seed": GrapeSeed
         }
 
-        if not (200 <= self.player.x <= 600 and 200 <= self.player.y <= 500): #angka itu ganti sama koordinat field tanaman
+        if not (50 <= self.player.x <= 450 and 400 <= self.player.y <= 750): #angka itu ganti sama koordinat field tanaman
             print("You need to be in the field area to plant seeds! (come close to field and click seed in inventory)")
             return
         
