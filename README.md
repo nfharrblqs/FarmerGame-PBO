@@ -1,8 +1,6 @@
 # Tiny Farmer 🌱🌟
 
-Simple pixel-art farming game built with Python.
-
-Where players can plant, harvest, raise animals and sell agricultural products!
+Simple pixel-art farming game built with Python where players can plant crops, raise animals, harvest products and build their farm!
 
 ---------------------------------------------------------------------------------------------------
 
@@ -73,39 +71,27 @@ This project was developed as part of the Final Examination assignment for the O
 
 ---------------------------------------------------------------------------------------------------
 
-## 📂 Folder Structures
+## 📂 Folder Structure
 
+```text
 FarmerGame-PBO/
-
 │
-
 ├── Animal/
-
 ├── AssetAnimal/
-
 ├── AssetPNG/
-
 ├── Commerce_System/
-
 ├── Decoration/
-
 ├── Field/
-
 ├── PartialSound/
-
 ├── Player/
-
+├── Screenshot/
 ├── Seed/
-
 ├── UI/
-
-├── musicBG
-
+├── musicBG/
 ├── ClassObject.py
-
 ├── Main.py
-
 └── README.md
+```
 
 ---------------------------------------------------------------------------------------------------
 
@@ -134,7 +120,7 @@ In this project, we implemented :
    
    Last, polymorphism. Implementation of polymorphism is in the AbstractPlant class which defines
    abstract methods such as abstractGrow and abstractHarvest , each type of plant implements both
-   methods with different growth login and harvest result. Polymorphism also implementes in the
+   methods with different growth logic and harvest result. Polymorphism also implemented in the
    decoration class with the abstract draw method, each child class implements the method with a
    different form according to the form of the decoration.
 
